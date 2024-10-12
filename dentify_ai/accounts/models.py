@@ -4,7 +4,20 @@ from .manager import CustomUserManager
 from django.core.validators import EmailValidator
 from accounts.helpers import validators as v
 import datetime as dt
+from django.conf import settings
+from storages.backends.s3boto3 import S3Boto3Storage
 
+class SupabaseStorage(S3Boto3Storage):
+    def __init__(self, *args, **kwargs):
+        kwargs['endpoint_url'] =  settings.ENDPOINT_URL
+        kwargs['access_key'] = settings.SUPABASE_ACCESS_KEY
+        kwargs['secret_key'] = settings.SUPABASE_SECRET_KEY
+        kwargs['bucket_name'] = settings.SUPABASE_BUCKET_NAME
+        super().__init__(*args, **kwargs)
+        
+    def url(self, name):
+        # Implement the method to return the URL for a file in Supabase
+        return f"{settings.SUPABASE_SERVE_URL}/{settings.SUPABASE_BUCKET_NAME}/{name}"
 
 class User(AbstractUser):
     GENDER = (
@@ -20,7 +33,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=150, blank=True, validators=[v.validate_last_name])
     gender = models.CharField(max_length=10, blank=True, choices=GENDER)
     dob = models.DateField(blank=True, null=True)
-    profile_pic = models.FileField(upload_to='media/user/profile', null=True, blank=True)
+    profile_pic = models.FileField(upload_to='user/profile', null=True, blank=True, storage=SupabaseStorage())
     last_modified = models.DateField(auto_now=True)
     # verification detail
     verified = models.BooleanField(default=False)

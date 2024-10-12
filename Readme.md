@@ -39,6 +39,8 @@ pip install -r requirements.txt
 ##### Run the Project
 ```
 cd .\dentify_ai\
+python manage.py makemigrations
+python manage.py migrate
 python manage.py runserver
 ```
 

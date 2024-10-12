@@ -7,14 +7,17 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
-    list_display = ('email', 'first_name', 'last_name', 'gender', 'phone','verified', 'is_staff')
+    list_display = ('email', 'first_name', 'last_name', 
+                    'gender', 'phone','verified', 'is_staff')
     list_filter = ('email', 'phone', 'is_staff', 'suspended', 'first_name')
     readonly_fields = ('date_joined', 'last_login','email_verified_at', 'phone_verified_at')
     fieldsets = (
                  (None, {'fields':('email', 'password')}),
-                 ('Personal info', {'fields': ('first_name', 'last_name','phone', 'verified','dob')}),
+                 ('Personal info', {'fields': ('profile_pic', 'verified')}),
+                 ('Personal info', {'fields': ('first_name', 'last_name','phone',
+                                               'dob', 'gender')}),
                  ('Account Activity', {'fields': ('date_joined', 'last_login')}),
-                 ('Permissions', {'fields':('is_staff', 'is_active', 'is_restricted')}))
+                 ('Permissions', {'fields':('is_staff', 'is_active', 'suspended')}))
 
     add_fieldsets = (
             (
@@ -25,7 +28,7 @@ class CustomUserAdmin(UserAdmin):
             (
             'Personal Information', {
             'classes':('wide',), 
-            'fields':('phone', 'first_name', 'last_name', 'dob')
+            'fields':('phone', 'first_name', 'last_name', 'dob', 'gender')
             }),
         )
 
