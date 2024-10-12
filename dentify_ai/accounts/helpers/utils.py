@@ -12,12 +12,12 @@ def send_email_to_client(subject, message, *email)->None:
 
 def otp_helper(user):
     user.email_otp = f"{rd.randint(10, 99)}{rd.randint(10, 99)}{rd.randint(10, 99)}"
-    user.otp_timestamp = dt.datetime.now(dt.timezone.utc)
+    user.email_otp_ts = dt.datetime.now(dt.timezone.utc)
     send_otp_email(user.email, user.first_name, user.email_otp)
     user.save()
 
 def forgot_otp_helper(user):
-    user.forgot_password_otp = f"{rd.randint(10, 99)}{rd.randint(10, 99)}{rd.randint(10, 99)}"
-    user.forgot_otp_timestamp = dt.datetime.now(dt.timezone.utc)
-    send_otp_email(user.email, user.first_name, user.forgot_password_otp, reason='Forgot Password')
+    user.fget_otp = f"{rd.randint(10, 99)}{rd.randint(10, 99)}{rd.randint(10, 99)}"
+    user.fget_otp_ts = dt.datetime.now(dt.timezone.utc)
+    send_otp_email(user.email, user.first_name, user.fget_otp, reason='Forgot Password')
     user.save()

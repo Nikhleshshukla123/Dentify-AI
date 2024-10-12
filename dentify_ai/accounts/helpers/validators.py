@@ -1,10 +1,10 @@
 from django.core.exceptions import ValidationError
 import re
 
-def validate_phone_number(phone_number:str)->bool:
-    phone_number = phone_number.strip()
-    if len(phone_number) == 10 and phone_number.isnumeric():
-        return phone_number
+def validate_phone(phone:str)->bool:
+    phone = phone.strip()
+    if len(phone) == 10 and phone.isnumeric():
+        return phone
 
     else:
         raise ValidationError("Invalid Phone Number")

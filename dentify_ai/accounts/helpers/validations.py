@@ -4,7 +4,7 @@ from . import validators as v
 class SignupDataValidation:
     def __init__(self, kwargs:dict):
         self.email = kwargs.get('email', '')
-        self.phone_number = kwargs.get('phone_number', '')
+        self.phone = kwargs.get('phone', '')
         self.first_name = kwargs.get('first_name', '')
         self.last_name = kwargs.get('last_name', '')
         self.password = kwargs.get('password', '')
@@ -22,13 +22,13 @@ class SignupDataValidation:
         return validated_data
 
     def is_valid(self):
-        all = self.email + self.phone_number + self.first_name + self.last_name + self.password + self.repassword 
+        all = self.email + self.phone + self.first_name + self.last_name + self.password + self.repassword 
         if len(all) == 0:
             self.errors.append("Please fill all the *required fields")
             return False
 
         self.data['email'] =  self.run_validator(data = self.email, validator = v.validate_email)
-        self.data['phone_number'] =  self.run_validator(data = self.phone_number, validator = v.validate_phone_number)
+        self.data['phone'] =  self.run_validator(data = self.phone, validator = v.validate_phone)
         self.data['first_name'] =  self.run_validator(data = self.first_name, validator = v.validate_first_name)
         self.data['last_name'] =  self.run_validator(data = self.last_name, validator = v.validate_last_name)
         self.password =  self.run_validator(data = self.password, validator = v.validate_password)
@@ -79,7 +79,7 @@ class PasswordUpdateDataValidation:
 
 class ProfileUpdateDataValidation:
     def __init__(self, kwargs:dict):
-        self.phone_number = kwargs.get('phone_number', '')
+        self.phone = kwargs.get('phone', '')
         self.first_name = kwargs.get('first_name', '')
         self.last_name = kwargs.get('last_name', '')
         self.errors = []
@@ -95,12 +95,12 @@ class ProfileUpdateDataValidation:
         return validated_data
 
     def is_valid(self):
-        all = self.phone_number + self.first_name + self.last_name
+        all = self.phone + self.first_name + self.last_name
         if len(all) == 0:
             self.errors.append("Please fill all the *required fields")
             return False
 
-        self.data['phone_number'] =  self.run_validator(data = self.phone_number, validator = v.validate_phone_number)
+        self.data['phone'] =  self.run_validator(data = self.phone, validator = v.validate_phone)
         self.data['first_name'] =  self.run_validator(data = self.first_name, validator = v.validate_first_name)
         self.data['last_name'] =  self.run_validator(data = self.last_name, validator = v.validate_last_name)
 

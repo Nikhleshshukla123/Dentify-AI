@@ -49,8 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-EXTERNAL_APPS = ['calculate',
-                 'home',
+EXTERNAL_APPS = [
                  'rest_framework',
                  'corsheaders',
                  'accounts',
@@ -138,7 +137,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = 'accounts.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

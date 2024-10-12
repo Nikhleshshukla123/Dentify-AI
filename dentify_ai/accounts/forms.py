@@ -1,15 +1,15 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser
+from accounts.models import User
 
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm):
-        model = CustomUser
-        fields = ('email','phone_number','first_name')
+        model = User
+        fields = ('email','phone','first_name','gender')
 
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
-        model = CustomUser
-        fields = ('phone_number','first_name')
+        model = User
+        fields = ('phone','first_name', 'last_name', 'gender')
         readonly_fields = ('email',)

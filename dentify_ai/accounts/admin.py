@@ -1,52 +1,40 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, CalculatorAccessRole
+from accounts.models import User
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
-    model = CustomUser
-    list_display = ('email', 'first_name', 'last_name', 'phone_number','verified', 'is_staff')
-    list_filter = ('email', 'phone_number', 'is_staff', 'is_restricted', 'first_name')
-    readonly_fields = ('date_joined', 'last_login',)
+    model = User
+    list_display = ('email', 'first_name', 'last_name', 'gender', 'phone','verified', 'is_staff')
+    list_filter = ('email', 'phone', 'is_staff', 'suspended', 'first_name')
+    readonly_fields = ('date_joined', 'last_login','email_verified_at', 'phone_verified_at')
     fieldsets = (
                  (None, {'fields':('email', 'password')}),
-                 ('Personal info', {'fields': ('first_name', 'last_name','phone_number', 'verified',)}),
+                 ('Personal info', {'fields': ('first_name', 'last_name','phone', 'verified','dob')}),
                  ('Account Activity', {'fields': ('date_joined', 'last_login')}),
-                 ('Permissions', {'fields':('is_staff', 'is_active', 'is_restricted', 'calc_access')}))
+                 ('Permissions', {'fields':('is_staff', 'is_active', 'is_restricted')}))
 
     add_fieldsets = (
             (
             None, {
             'classes':('wide',), 
-            'fields':('email', 'password1', 'password2', 'is_staff', 'is_active', 'calc_access')
+            'fields':('email', 'password1', 'password2', 'is_staff', 'is_active')
             }),
             (
             'Personal Information', {
             'classes':('wide',), 
-            'fields':('phone_number', 'first_name', 'last_name')
+            'fields':('phone', 'first_name', 'last_name', 'dob')
             }),
         )
 
-    search_fields = ('email', 'first_name', 'last_name', 'phone_number', 'calc_access')
+    search_fields = ('email', 'first_name', 'last_name', 'phone', 'gender')
 
     ordering = ('date_joined',)
 
-@admin.register(CalculatorAccessRole)
-class CalculatorAccessRoleAdmin(admin.ModelAdmin):
-    list_display = ('role_name', 'created_at', 'walls', 'windows', 'roof', 'occupants', 'equipments', 'no_of_user')
-    search_fields = ('role_name',)
-    readonly_fields = ('created_at',)
 
-    
-    def no_of_user(self, rolename):
-        result = CustomUser.objects.filter(calc_access__role_name = rolename).count()
-        return result
-   
-
-
-admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(User, CustomUserAdmin)
 
 # admin.site.register(CalculatorAccessRole, CalculatorAccessRoleAdmin)
 

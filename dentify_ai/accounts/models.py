@@ -6,43 +6,47 @@ from accounts.helpers import validators as v
 import datetime as dt
 
 
-
-class CalculatorAccessRole(models.Model):
-    walls = models.BooleanField(default=False)
-    windows = models.BooleanField(default=False)
-    roof = models.BooleanField(default=False)
-    occupants = models.BooleanField(default=False)
-    equipments = models.BooleanField(default=False)
-    role_name = models.CharField(max_length=30, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name_plural = 'Calculator Access Roles'
-        ordering = ['role_name']
-        unique_together = ('walls', 'windows', 'roof', 'occupants', 'equipments')
-    def __str__(self):
-        return self.role_name
-
-
-class CustomUser(AbstractUser):
+class User(AbstractUser):
+    GENDER = (
+        ('m', 'Male'),
+        ('f', 'Female'),
+        ('x', 'Other')
+    )
     username = None
+    # profile data
     email = models.EmailField(unique=True, validators=[EmailValidator, v.validate_email])
-    phone_number = models.CharField(max_length=10, unique=True, validators=[v.validate_phone_number])
+    phone = models.CharField(max_length=10, unique=True, validators=[v.validate_phone])
     first_name = models.CharField(max_length=150, validators=[v.validate_first_name])
     last_name = models.CharField(max_length=150, blank=True, validators=[v.validate_last_name])
+    gender = models.CharField(max_length=10, blank=True, choices=GENDER)
+    dob = models.DateField(blank=True, null=True)
+    profile_pic = models.FileField(upload_to='media/user/profile', null=True, blank=True)
+    last_modified = models.DateField(auto_now=True)
+    # verification detail
     verified = models.BooleanField(default=False)
     email_otp = models.CharField(max_length=6,blank=True, null=True)
-    forgot_password_otp = models.CharField(max_length=6, null=True, blank=True)
-    password_update_token = models.CharField(max_length=100, null=True, blank=True)
-    otp_timestamp = models.DateTimeField(auto_now_add=True)
-    forgot_otp_timestamp = models.DateTimeField(blank=True, null=True)
-    is_restricted = models.BooleanField(default=True)
-    calc_access = models.ForeignKey(CalculatorAccessRole, on_delete=models.PROTECT, null=True, blank=True)
+    email_otp_ts = models.DateTimeField(blank=True, null=True)
+    email_verified_at = models.DateTimeField(blank=True, null=True)
+    phone_otp = models.CharField(max_length=6,blank=True, null=True)
+    phone_otp_ts = models.DateTimeField(blank=True, null=True)
+    phone_verified_at = models.DateTimeField(blank=True, null=True)
+    # forgot password
+    fget_otp = models.CharField(max_length=6,blank=True, null=True)
+    fget_token = models.CharField(max_length=100, null=True, blank=True)
+    fget_otp_ts = models.DateTimeField(blank=True, null=True)
+    last_fget = models.DateTimeField(blank=True, null=True)
+    # suspension
+    suspended = models.BooleanField(default=True)
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['phone_number', 'first_name']
+    REQUIRED_FIELDS = ['phone', 'first_name']
+
+    
+    class Meta:
+        db_table = "Users"
+        verbose_name = "User"
 
     def __str__(self):
         return f'{self.email} : {self.first_name}'

@@ -6,7 +6,6 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 import datetime as dt
 import random as rd
-from .models import CalculatorAccessRole
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 import io
@@ -24,7 +23,7 @@ def register(request):
         dataval = SignupDataValidation(request.POST)
         if dataval.is_valid():  
             d = dataval.data          
-            user = User.objects.filter(email = d['email'], phone_number = d['phone_number'])
+            user = User.objects.filter(email = d['email'], phone = d['phone'])
             if user.exists():
                 messages.error(request, "User already exist")
                 return redirect('signup')
@@ -33,7 +32,7 @@ def register(request):
                 user = User.objects.create_user(**d)
                 user.set_password(dataval.password)
                 user.save()
-                # print('registered successfully', user)
+                print('registered successfully', user)
                 otp_helper(user)
                 messages.success(request, "Account Created")
                 messages.success(request, "We have sent an OTP to your email for verification")
@@ -70,11 +69,6 @@ def verifyemail(request):
                 elif user.email_otp == otp:
                     user.verified = True
                     user.email_otp = ''
-                    user.calc_access = CalculatorAccessRole.objects.filter(walls = True, 
-                                                                           windows = True, 
-                                                                           roof = True, 
-                                                                           occupants = True, 
-                                                                           equipments = True).first()
                     user.save()
                     messages.success(request, "Email Verified")
                     return redirect('login')
@@ -128,7 +122,7 @@ def profile(request):
                     'first_name' : user.first_name,
                     'last_name' : user.last_name,
                     'verified' : user.verified,
-                    'phone_number' : user.phone_number
+                    'phone' : user.phone
                 }
         }
         else:
@@ -140,7 +134,7 @@ def profile(request):
             'first_name' : request.user.first_name,
             'last_name' : request.user.last_name,
             'verified' : request.user.verified,
-            'phone_number' : request.user.phone_number,
+            'phone' : request.user.phone,
         }
 
     return HttpResponse(json.dumps(response), content_type='application/json')
@@ -154,7 +148,7 @@ def userauth(request):
         password = request.POST.get('password', '')
         if email and password:
             user = authenticate(email=email, password=password)
-            # print('user', user, 'logged in')
+            print('user', user, 'logged in')
             if user is not None:
                 login(request, user)
                 if user.verified:
@@ -202,15 +196,15 @@ def forgotpasswordotp(request):
                     return render(request, 'accounts/forgotpassword.html', context={'email':email})
 
                 elif user.forgot_password_otp == otp:
-                    p_token = f'${user.id}_TS_{dt.datetime.now().timestamp()/rd.randint(111, 5964)}${hex(int(user.phone_number))}' 
-                    user.password_update_token = p_token
+                    p_token = f'${user.id}_TS_{dt.datetime.now().timestamp()/rd.randint(111, 5964)}${hex(int(user.phone))}' 
+                    user.fget_token = p_token
                     user.forgot_password_otp = ''
                     user.forgot_otp_timestamp = None
                     user.save()
                     messages.success(request, "OTP Verified. Now create new password")
 
                     response = redirect('newpassword')
-                    response.set_cookie('p_token', user.password_update_token, max_age=600)
+                    response.set_cookie('p_token', user.fget_token, max_age=600)
                     return response
                 else:
                     messages.error(request, "Invalid OTP")
@@ -233,7 +227,7 @@ def newpassword(request):
             dataval = PasswordUpdateDataValidation(request.POST)
             if dataval.is_valid():  
                 d = dataval.data          
-                user = User.objects.filter(password_update_token = p_token)
+                user = User.objects.filter(fget_token = p_token)
                 if user.exists():
                     user = user.first()
                     user.set_password(dataval.password)
