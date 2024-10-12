@@ -1,8 +1,26 @@
-from django.conf import settings
-from django.db.models.signals import post_save
+from accounts.models import User
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from worker.profile_worker import delete_pic
+import random as rd
+import asyncio
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def send_verification_email(sender, instance=None, created=False, **kwargs):
-    if created:
-        print(instance, intance.email)
+
+@receiver(pre_save, sender=User)
+def handle_profile_pic(sender, instance=None, created=False, **kwargs):
+    if not created:
+        print(instance, instance.email)
+        original = User.objects.get(pk=instance.pk)
+        pic = instance.profile_pic
+        if pic.name != original.profile_pic.name:
+            # Perform your specific action here
+            if pic.file.size // 1024 < 100:
+                old_pic = original.profile_pic
+                num = 10**4
+                pk = instance.pk
+                instance.profile_pic.name = f'user/xu-{pk}-0{num - pk * pk // 10 ** 2 }/profile/pic-{pic.name[-30:]}'
+                asyncio.run(delete_pic(old_pic))
+            else:
+                instance.profile_pic = original.profile_pic
+            print("Attribute 'profile_pic' has been modified.")
+

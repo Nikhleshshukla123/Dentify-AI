@@ -13,7 +13,7 @@ class CustomUserAdmin(UserAdmin):
     readonly_fields = ('date_joined', 'last_login','email_verified_at', 'phone_verified_at')
     fieldsets = (
                  (None, {'fields':('email', 'password')}),
-                 ('Personal info', {'fields': ('profile_pic', 'verified')}),
+                 ('Profile Settings', {'fields': ('profile_pic', 'verified')}),
                  ('Personal info', {'fields': ('first_name', 'last_name','phone',
                                                'dob', 'gender')}),
                  ('Account Activity', {'fields': ('date_joined', 'last_login')}),

@@ -25,6 +25,7 @@ class User(AbstractUser):
         ('f', 'Female'),
         ('x', 'Other')
     )
+    FILE_LOCATION = 'user'
     username = None
     # profile data
     email = models.EmailField(unique=True, validators=[EmailValidator, v.validate_email])
@@ -33,7 +34,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=150, blank=True, validators=[v.validate_last_name])
     gender = models.CharField(max_length=10, blank=True, choices=GENDER)
     dob = models.DateField(blank=True, null=True)
-    profile_pic = models.FileField(upload_to='user/profile', null=True, blank=True, storage=SupabaseStorage())
+    profile_pic = models.FileField(upload_to='', null=True, blank=True, storage=SupabaseStorage())
     last_modified = models.DateField(auto_now=True)
     # verification detail
     verified = models.BooleanField(default=False)
@@ -63,3 +64,20 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.email} : {self.first_name}'
+
+    # def generate_filename(self, filename, location = 'profile'):
+    #     ts = dt.datetime.now(tz=dt.timezone.utc)
+    #     num = 10**4
+    #     pk = self.pk
+    #     filename = f'user/xu-{pk}-0{num - pk * pk // 10 ** 2 }/{location}/Ts{ts}_{filename[-10:]}'
+    #     return filename
+
+    # def save(self, *args, **kwargs):
+    #     if self.pk is not None:
+    #         print(self.pk, type(self.pk))
+    #         if self.profile_pic.name:
+    #             print(self.profile_pic.url, 'pic')
+    #             self.profile_pic.name = self.generate_filename(self.profile_pic.name)
+    #             print(self.profile_pic.url, 'profile')
+
+    #     super(User, self).save(*args, **kwargs)
