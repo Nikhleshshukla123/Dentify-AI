@@ -5,7 +5,7 @@ import datetime as dt
 class Prediction(models.Model):
     pred_id = models.BigAutoField(primary_key=True, verbose_name='home_prediction_pk')
     message = models.TextField(max_length=300, blank=True)
-    xray_file = models.FileField(upload_to='', editable=False, storage=SupabaseStorage())
+    xray_file = models.FileField(upload_to='', storage=SupabaseStorage())
     # prediction detail
     pred_ts = models.DateTimeField(auto_now=True)
     result = models.CharField(max_length=30)

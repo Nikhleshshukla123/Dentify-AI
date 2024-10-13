@@ -7,11 +7,14 @@ import asyncio
 
 
 @receiver(pre_save, sender=Prediction)
-def handle_xray_file(sender, instance=None, created=False, **kwargs):
-    if created:
+def handle_xray_file(sender, instance=None, **kwargs):
+    if instance.pred_id is None:
         pic = instance.xray_file
         num = 10**4
-        pk = instance.pk
+        pk = instance.user.pk
         instance.xray_file.name = f'user/xu-{pk}-0{num - pk * pk // 10 ** 2 }/xray-file/pic-{pic.name[-30:]}'
         print("Attribute 'xray_file' has been modified.")
+    else:
+        instance.xray_file = Prediction.objects.get(pk=instance.pred_id).xray_file
+
 
