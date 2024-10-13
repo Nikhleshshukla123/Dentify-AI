@@ -53,6 +53,7 @@ EXTERNAL_APPS = [
                  'rest_framework',
                  'corsheaders',
                  'accounts',
+                 'home'
 ]
 
 INSTALLED_APPS += EXTERNAL_APPS

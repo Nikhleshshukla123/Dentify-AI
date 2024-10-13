@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from .manager import CustomUserManager
+from accounts.manager import CustomUserManager
 from django.core.validators import EmailValidator
 from accounts.helpers import validators as v
 import datetime as dt
@@ -25,7 +25,6 @@ class User(AbstractUser):
         ('f', 'Female'),
         ('x', 'Other')
     )
-    FILE_LOCATION = 'user'
     username = None
     # profile data
     email = models.EmailField(unique=True, validators=[EmailValidator, v.validate_email])
