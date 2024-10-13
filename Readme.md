@@ -20,7 +20,7 @@ cd dentify-ai
 #### Create virtual environment and install dependencies
 - `Create environment`<br>
 ```
-python -m venv env
+python -m virtualenv env -p python312
 ```
 
 - `Activate environment`<br>
@@ -44,3 +44,15 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+#### Update the Code
+- `Reach the dentify-ai directory first`<br>
+
+```
+git pull
+.\env\Scripts\activate
+pip install -r requirements.txt
+cd .\dentify_ai\
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```

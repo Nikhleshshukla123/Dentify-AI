@@ -64,20 +64,3 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.email} : {self.first_name}'
-
-    # def generate_filename(self, filename, location = 'profile'):
-    #     ts = dt.datetime.now(tz=dt.timezone.utc)
-    #     num = 10**4
-    #     pk = self.pk
-    #     filename = f'user/xu-{pk}-0{num - pk * pk // 10 ** 2 }/{location}/Ts{ts}_{filename[-10:]}'
-    #     return filename
-
-    # def save(self, *args, **kwargs):
-    #     if self.pk is not None:
-    #         print(self.pk, type(self.pk))
-    #         if self.profile_pic.name:
-    #             print(self.profile_pic.url, 'pic')
-    #             self.profile_pic.name = self.generate_filename(self.profile_pic.name)
-    #             print(self.profile_pic.url, 'profile')
-
-    #     super(User, self).save(*args, **kwargs)
