@@ -9,7 +9,7 @@
   
 #### Clone the Project
 ```
-git clone git@github.com:nikhivishwaa/dentify-ai.git -b dev
+git clone git@github.com:reymusic/dentify-ai.git -b dev
 ```
 
 #### Go to Project Directory

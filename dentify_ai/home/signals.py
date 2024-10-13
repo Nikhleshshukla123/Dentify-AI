@@ -12,7 +12,7 @@ def handle_xray_file(sender, instance=None, **kwargs):
         pic = instance.xray_file
         num = 10**4
         pk = instance.user.pk
-        instance.xray_file.name = f'user/xu-{pk}-0{num - pk * pk // 10 ** 2 }/xray-file/pic-{pic.name[-30:]}'
+        instance.xray_file.name = f'user/xu-{pk}-0{num - pk * pk // 10 ** 2 }/xray-file/tf-{rd.random()*rd.randint(2,10*3)}-{pic.name[-30:]}'
         print("Attribute 'xray_file' has been modified.")
     else:
         instance.xray_file = Prediction.objects.get(pk=instance.pred_id).xray_file
