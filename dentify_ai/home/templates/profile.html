@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Teeth Disease Classification System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.1/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Container for Profile Section -->
+    <div class="max-w-4xl mx-auto mt-10 bg-white p-6 shadow-md rounded-lg">
+        <!-- User Information Section -->
+        <div class="flex items-center">
+            <img class="w-24 h-24 rounded-full" src="https://via.placeholder.com/150" alt="Profile Picture">
+            <div class="ml-4">
+                <h2 class="text-2xl font-bold text-gray-800">John Doe</h2>
+                <p class="text-gray-600">johndoe@example.com</p>
+                <p class="text-gray-600">Age: 35</p>
+            </div>
+        </div>
+
+        <!-- Teeth Image Uploads History -->
+        <div class="mt-8">
+            <h3 class="text-xl font-bold text-gray-800">Teeth Image Uploads</h3>
+            <table class="w-full mt-4 table-auto border-collapse">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border px-4 py-2 text-gray-600">Image</th>
+                        <th class="border px-4 py-2 text-gray-600">Upload Date</th>
+                        <th class="border px-4 py-2 text-gray-600">Disease</th>
+                        <th class="border px-4 py-2 text-gray-600">Confidence (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="text-center">
+                        <td class="border px-4 py-2">
+                            <img class="w-12 h-12 rounded" src="https://via.placeholder.com/50" alt="Teeth Image">
+                        </td>
+                        <td class="border px-4 py-2">2024-10-09</td>
+                        <td class="border px-4 py-2">Gingivitis</td>
+                        <td class="border px-4 py-2">87</td>
+                    </tr>
+                    <tr class="text-center">
+                        <td class="border px-4 py-2">
+                            <img class="w-12 h-12 rounded" src="https://via.placeholder.com/50" alt="Teeth Image">
+                        </td>
+                        <td class="border px-4 py-2">2024-10-08</td>
+                        <td class="border px-4 py-2">Cavities</td>
+                        <td class="border px-4 py-2">92</td>
+                    </tr>
+                    <tr class="text-center">
+                        <td class="border px-4 py-2">
+                            <img class="w-12 h-12 rounded" src="https://via.placeholder.com/50" alt="Teeth Image">
+                        </td>
+                        <td class="border px-4 py-2">2024-10-07</td>
+                        <td class="border px-4 py-2">Plaque</td>
+                        <td class="border px-4 py-2">78</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Upload New Teeth Image Section -->
+        <div class="mt-8">
+            <h3 class="text-xl font-bold text-gray-800">Upload New Teeth Image</h3>
+            <form action="#" method="POST" enctype="multipart/form-data" class="mt-4">
+                <input type="file" name="image" class="block w-full text-sm text-gray-700 border rounded-lg focus:outline-none mb-3">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Upload</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>
