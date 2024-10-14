@@ -8,8 +8,8 @@ import asyncio
 
 @receiver(pre_save, sender=User)
 def handle_profile_pic(sender, instance=None, **kwargs):
-    if instance.id is not None:
-        print('updated',instance.id)
+    if instance.id is not None and instance.profile_pic.name:
+        print('profile_pic added:',instance.id, instance.profile_pic.name)
         original = User.objects.get(pk=instance.pk)
         pic = instance.profile_pic
         if pic.name != original.profile_pic.name:
