@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block head %}<title>Signup: Create account with TonnaMatrix to access premium features</title>{% endblock %}
+{% block head %}<title>Signup: Create account with Dentify AI to try out our product</title>{% endblock %}
 
 {% block body %}
 <div class="flex flex-col justify-start max-[357px]:w-[96%] max-[357px]:mx-auto">
@@ -21,7 +21,7 @@
     </nav>
     <div class="wrapper min-[400px]:w-[450px] w-[100%]">
         <div class="title-text">
-            <div class="title signup">Signup to TonnaMatrix</div>
+            <div class="title signup">Signup to Dentify AI</div>
         </div>
         <div class="form-container">
             <div class="slide-controls">
@@ -85,7 +85,7 @@
                     <div class="field btn">
                         <input type="submit" value="Signup">
                     </div>
-                    <div id="loginForm" class="login-link">Already have an account? <a href="/login">Login</a></div>
+                    <div id="loginForm" class="login-link">Already have an account? <a href="{% url 'login' %}">Login</a></div>
                 </form>
             </div>
         </div>

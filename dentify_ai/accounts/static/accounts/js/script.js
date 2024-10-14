@@ -8,13 +8,13 @@ signupBtn.onclick = () => {
   // document.location.pathname = '/signup';
   loginForm.style.marginLeft = "-50%";
   loginText.style.marginLeft = "-50%";
-  if (document.location.pathname === "/login/") {
-    document.location.pathname = "/signup";
+  if (document.location.pathname === "/user/login/") {
+    document.location.pathname = "/user/signup";
   }
 };
 loginBtn.onclick = () => {
-  if (document.location.pathname === "/signup/") {
-    document.location.pathname = "/login";
+  if (document.location.pathname === "/user/signup/") {
+    document.location.pathname = "/user/login";
   }
   loginForm.style.marginLeft = "0%";
   loginText.style.marginLeft = "0%";
