@@ -38,7 +38,8 @@ def register(request):
                 messages.success(request, "Account Created")
                 messages.success(request, "We have sent an OTP to your email for verification")
         
-                return render(request, 'accounts/verifyemail.html', context={'email':user.email, "sent":True})
+                # renering verify email page on signup route
+                return render(request, 'accounts/verifyemail.html', context={'email':user.email, "status":"sent"})
         else:
             print(dataval.errors, dataval.data)
             messages.error(request, dataval.errors)
@@ -46,52 +47,86 @@ def register(request):
 
     return render(request, 'accounts/signup.html') 
 
+@login_required(login_url="login")
+def verification_otp(request):
+    if request.user.verified:
+        return redirect('dashboard')
+    else:
+        otp_helper(request.user)
+        messages.success(request, "OTP has been sent to your email for verification")
+        return redirect('verifyemail')
+    
 
-def verifyemail(request):
+
+def verifyemail(request):    
     if request.method == 'POST':
         email = request.POST.get('email', '').lower()
         otp = request.POST.get('otp', '')
         resend = request.POST.get('resend', '')
 
-        if email:
-            user = User.objects.filter(email = email)
-            if user.exists():
-                user = user.first()
-                if resend == 'resend':
-                    otp_helper(user)
-                    messages.info(request, "OTP has been resent successfully")
-                    return render(request, 'accounts/verifyemail.html', context={'email':user.email, 'status': 'rensend'})
-                
-                elif (dt.datetime.now(dt.timezone.utc) - user.email_otp_ts).seconds >= 600:
-                    user.email_otp = ''
-                    user.save()
-                    messages.error(request, "OTP Expired")
-                    return render(request, 'accounts/verifyemail.html', context={'email':email, 'status': 'expired'})
+        remaining = 0
+        user = None
 
-                elif user.email_otp == otp:
-                    user.verified = True
-                    user.email_otp = ''
-                    user.email_verified_at = dt.datetime.now(dt.timezone.utc)
-                    user.save()
-                    messages.success(request, "Email Verified")
-                    return redirect('login')
-                else:
-                    messages.error(request, "Invalid OTP")
-                    return render(request, 'accounts/verifyemail.html', context={'email':email})
+        # first get the user
+        if request.user.is_authenticated:
+            user = request.user
+        elif email:
+            user = User.objects.filter(email = email).first()
         else:
             messages.error(request, f"{'OTP' if not otp else 'Email'} is missing")
             messages.warning(request, "Login to Continue Verification Process")
             return redirect('login')
-    elif request.user.is_authenticated and not request.user.verified:
-        if (dt.datetime.now(dt.timezone.utc) - request.user.email_otp_ts).seconds >= 600:
-            otp_helper(request.user)
-            messages.success(request, "OTP has been sent Successfully")
         
-        else:
-            remaining = 600 - (dt.datetime.now(dt.timezone.utc) - request.user.email_otp_ts).seconds
-            messages.warning(request, f"Wait {round(remaining/60)} more minutes {remaining%60} seconds for new OTP")
-            return render(request, 'accounts/verifyemail.html', context={'email':request.user.email})
+        #  now process with the user
+        if user is not None:
+            if user.verified:
+                messages.warning(request, "Already verified")
+                return redirect('login')
+            
+            # calculate how many seconds left for otp to be valid
+            if user.email_otp_ts is not None:
+                remaining = 600 - (dt.datetime.now(dt.timezone.utc) - user.email_otp_ts).seconds
+                remaining = max(remaining, 0)
 
+            # if user requested to resend otp
+            if resend == 'resend':
+                if remaining and user.email_otp:
+                    messages.warning(request, f"Wait {round(remaining/60)} more minutes {remaining%60} seconds for new OTP")
+                else:
+                    otp_helper(user)
+                    messages.info(request, "OTP has been resent successfully")
+                    return render(request, 'accounts/verifyemail.html', context={'email':user.email, 'status': 'rensend'})
+            
+            # if otp is expired
+            elif not remaining:
+                user.email_otp = ''
+                user.save()
+                messages.error(request, "OTP Expired")
+                return render(request, 'accounts/verifyemail.html', context={'email':email, 'status': 'expired'})
+
+            # if otp is valid
+            elif user.email_otp == otp:
+                user.verified = True
+                user.email_otp = ''
+                user.email_verified_at = dt.datetime.now(dt.timezone.utc)
+                user.email_otp_ts = None
+                user.save()
+                messages.success(request, "Email Verified")
+                return redirect('login')
+            
+            # if otp is invalid
+            else:
+                messages.error(request, "Invalid OTP")
+                return render(request, 'accounts/verifyemail.html', context={'email':email, 'status':'invalid'})
+
+    
+    # handle GET request
+    if request.user.is_authenticated:
+        if request.user.verified:
+            return redirect('dashboard')
+       
+        else:
+            return render(request, 'accounts/verifyemail.html', context={'email':request.user.email, 'status':'fresh'})
     return redirect('login')
 
 
@@ -99,7 +134,7 @@ def logoutuser(request):
     logout(request)
     return redirect('/')
 
-@login_required(login_url="/login")
+@login_required(login_url="login")
 @csrf_exempt
 def profile(request):
     response = {'success': True}
@@ -125,7 +160,8 @@ def profile(request):
                     'first_name' : user.first_name,
                     'last_name' : user.last_name,
                     'verified' : user.verified,
-                    'phone' : user.phone
+                    'phone' : user.phone,
+                    'profile_pic': user.profile_pic.url if user.profile_pic else ''
                 }
         }
         else:
@@ -138,13 +174,28 @@ def profile(request):
             'last_name' : request.user.last_name,
             'verified' : request.user.verified,
             'phone' : request.user.phone,
+            'profile_pic': request.user.profile_pic.url if request.user.profile_pic else ''
         }
 
     return HttpResponse(json.dumps(response), content_type='application/json')
-    
+
+@login_required(login_url="login")  
+def profileform(request):
+    if request.method == 'POST':
+        u = request.user
+        print(request.FILES)
+        u.profile_pic = request.FILES.get('profile_pic', '')
+        u.gender = request.POST.get('gender','')
+        u.dob = request.POST.get('dob','')
+        u.save()
+        messages.success(request, "Profile Updated Successfully")
+        return redirect('dashboard')
+    return render(request, 'accounts/profileform.html')
+
 def userauth(request):
     if request.user.is_authenticated:
-        return redirect('/')
+        return redirect('send_otp')
+        
 
     elif request.method == 'POST':
         email = request.POST.get('email', '').lower()
@@ -154,10 +205,7 @@ def userauth(request):
             print('user', user, 'logged in')
             if user is not None:
                 login(request, user)
-                if user.verified:
-                    return redirect('/dashboard')
-                else:
-                    return redirect('verifyemail')
+                return redirect('send_otp')             
 
             else:
                 messages.error(request, "Invalid Credentials")
@@ -176,43 +224,46 @@ def forgotpasswordotp(request):
         resend = request.POST.get('resend', '')
 
         if email:
-            user = User.objects.filter(email = email)
-            if user.exists():
-                user = user.first()
+            user = User.objects.filter(email = email).first()
+            if user is not None:
                 remaining = 0
-                fresh = True
+                # calculate how many seconds left for otp to be valid
                 if user.fget_otp_ts is not None:
                     remaining = 600 - (dt.datetime.now(dt.timezone.utc) - user.fget_otp_ts).seconds
-                    fresh = False
+                    remaining = max(remaining, 0)
+
+                # if user requested to resend otp
                 if resend == 'resend':
-                    if remaining > 0 and user.fget_otp:
+                    if remaining and user.fget_otp:
                         messages.warning(request, f"Wait {round(remaining/60)} more minutes {remaining%60} seconds for new OTP")
                     else:
                         forgot_otp_helper(user)
                         messages.info(request, f"OTP has been {'resent' if user.fget_otp else 'sent'} successfully")
                     return render(request, 'accounts/forgotpassword.html', context={'email':user.email})
                 
-                elif remaining <= 0:
+                # if otp is expired
+                elif not remaining:
                     user.fget_otp = ''
                     user.save()
                     messages.error(request, "OTP Expired")
-                    return render(request, 'accounts/forgotpassword.html', context={'email':email})
+                    return render(request, 'accounts/forgotpassword.html', context={'email':email, 'status':'expired'})
 
+                # if otp is valid
                 elif user.fget_otp == otp:
                     p_token = f'${user.id}_TS_{dt.datetime.now().timestamp()/rd.randint(111, 5964)}${hex(int(user.phone))}' 
                     user.fget_token = p_token
                     user.fget_otp = ''
-                    user.fget_otp_ts = None
-                    user.last_fget = dt.datetime.now(dt.timezone.utc)
                     user.save()
                     messages.success(request, "OTP Verified. Now create new password")
 
                     response = redirect('newpassword')
                     response.set_cookie('p_token', user.fget_token, max_age=600)
                     return response
+                
+                # if otp is invalid
                 else:
                     messages.error(request, "Invalid OTP")
-                    return render(request, 'accounts/forgotpassword.html', context={'email':email})
+                    return render(request, 'accounts/forgotpassword.html', context={'email':email, 'status':'invalid'})
             else:
                 messages.error(request, "Invalid User Email")
                 return redirect('forgotpassword')
@@ -231,10 +282,11 @@ def newpassword(request):
             dataval = PasswordUpdateDataValidation(request.POST)
             if dataval.is_valid():  
                 d = dataval.data          
-                user = User.objects.filter(fget_token = p_token)
-                if user.exists():
-                    user = user.first()
+                user = User.objects.filter(fget_token = p_token).first()
+                if user is not None:
                     user.set_password(dataval.password)
+                    user.fget_token = ''
+                    user.last_fget = dt.datetime.now(dt.timezone.utc)
                     user.save()
                     messages.success(request, "Password Changed Successfully")
 
