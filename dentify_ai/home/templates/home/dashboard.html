@@ -20,7 +20,6 @@
   {% endfor %}
 </section>
 
-
 <div id="alert-area" class="relative m-0"></div>
 {% endif %}
 <div class="container items-center justify-center px-4 py-8 bg-[white] rounded-lg shadow-md max-h-fit">
@@ -30,7 +29,7 @@
       class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 transition duration-300">
       <p class="text-gray-600 mb-2">Drag and drop your X-ray image here</p>
       <p class="text-sm text-gray-500">or</p>
-      <label for="fileInput"
+      <label for="dropzone"
         class="mt-2 inline-block bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600 transition duration-300">
         Select File
       </label>
@@ -85,61 +84,5 @@
     </table>
   </div>
 
-
-  {% endblock %}
-
-  {% block script %}
-  <script>
-    function searchTable() {
-      var input, filter, table, tr, td, i, txtValue;
-      input = document.getElementById("search");
-      filter = input.value.trim().toLowerCase();
-      table = document.querySelector("table");
-      tr = table.getElementsByTagName("tr");
-      for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[3]; // Index 3 corresponds to the "Result" column
-        if (td) {
-          txtValue = td.textContent || td.innerText;
-          if (txtValue.toLowerCase().includes(filter)) {
-            tr[i].style.display = "";
-            td.style.backgroundColor = "yellow";
-          } else {
-            tr[i].style.display = "none";
-            td.style.backgroundColor = "";
-          }
-        }
-      }
-    }
-
-    document.getElementById('dropzone').addEventListener('click', (e) => {
-      e.preventDefault();
-      document.getElementById('fileInput').click();
-    });
-
-    async function handleFileSelect(files) {
-      console.log(files);
-      const formData = new FormData();
-      formData.append('xray_file', files[0]);
-
-      try {
-        const response = await fetch('{% url "predict" %}', {
-          method: 'POST',
-          body: formData,
-        });
-        
-        if (response.ok) {
-          const result = await response.text();
-          console.log(result);
-          // Handle successful prediction here
-        } else {
-          console.error('Prediction failed');
-          // Handle failed prediction here
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        // Handle any network or other errors here
-      }
-    }
-  </script>
 
   {% endblock %}
