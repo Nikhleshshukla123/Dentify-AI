@@ -7,3 +7,6 @@ def home(request):
         return HttpResponse("Welcome to the Dentify AI platform!")
     
     return redirect('login')
+
+def landingpage(request):
+    return render(request, 'home/landingpage.html')

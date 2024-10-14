@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dentify AI</title>
+
+  <script type="module" crossorigin src="{% static 'home/js/index.js' %}"></script>
+  <link rel="stylesheet" crossorigin href="{% static 'home/css/index.css' %}">
+</head>
+
+<body class="bg-gray-100 text-gray-900 overflow-x-hidden">
+    <!-- Premium Navbar -->
+    <nav class="fixed top-0 w-full z-50 bg-white backdrop-blur-md shadow-lg">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Brand Logo -->
+            <div><a href="#home"
+                    class="text-2xl font-extrabold text-gray-800 hover:text-blue-500 transition duration-300">Dentify
+                    AI</a></div>
+            <!-- Navigation Links -->
+            <div class="hidden md:flex space-x-8">
+                <a href="#about"
+                    class="text-gray-800 font-semibold hover:text-blue-500 transition duration-300">About</a>
+                <a href="#features"
+                    class="text-gray-800 font-semibold hover:text-blue-500 transition duration-300">Features</a>
+                <a href="#contact"
+                    class="text-gray-800 font-semibold hover:text-blue-500 transition duration-300">Contact</a>
+            </div>
+            <!-- Buttons -->
+            <div class="flex items-center space-x-4">
+                <a href="{% url 'signup' %}"
+                    class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow-lg hover:bg-blue-600 transition duration-300">Sign
+                    Up</a>
+                <a href="{% url 'login' %}"
+                    class="px-4 py-2 text-gray-800 border border-gray-800 rounded-md shadow-lg hover:bg-gray-800 hover:text-white transition duration-300">Login</a>
+            </div>
+            <!-- Mobile Menu Icon -->
+            <div class="md:hidden flex items-center">
+                <button id="menu-toggle" class="focus:outline-none">
+                    <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white bg-opacity-80 backdrop-blur-md shadow-lg">
+        <a href="#about" class="block px-6 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">About</a>
+        <a href="#features" class="block px-6 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">Features</a>
+        <a href="#contact" class="block px-6 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">Contact</a>
+    </div>
+
+    <!-- 3D Tooth Model Section with Welcome Text -->
+    <section id="home" class="relative flex justify-center items-center h-screen bg-gray-200">
+        <!-- 3D Model container -->
+        <canvas id="3d-tooth" class="absolute overflow-hidden"></canvas>
+
+        <!-- Welcome Text Overlay -->
+        <div class="relative z-10 text-center text-white">
+            <h1 class="text-5xl font-bold mb-4" style="background-blend-mode: color;
+    filter: drop-shadow(2px 4px 6px black);">Welcome to Dentify AI</h1>
+            <p class="text-xl mb-8" style="  background-blend-mode: color;
+    filter: drop-shadow(2px 4px 6px black);">Get started with cutting-edge AI solutions for dentistry</p>
+            <button class="px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded text-white">Get Started</button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-white">
+        <div class="text-center">
+            <h2 class="text-4xl font-bold mb-4">Revolutionary AI for Dentistry</h2>
+            <p class="text-xl mb-8">We provide cutting-edge solutions to dentists for predicting diseases from X-ray
+                data.</p>
+        </div>
+        <div class="flex justify-center">
+            <img src="https://via.placeholder.com/400x300" alt="X-ray prediction" class="w-1/3 shadow-lg" />
+            <div class="ml-10 text-left">
+                <h3 class="text-2xl font-bold">Predict Dental Issues</h3>
+                <p class="text-lg">Using AI to analyze dental X-rays, our system can detect early signs of tooth decay,
+                    fractures, and other issues before they worsen.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-gray-100">
+        <div class="text-center max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold mb-4">About Dentify AI</h2>
+            <p class="text-xl">Dentify AI is dedicated to revolutionizing dental care by leveraging artificial
+                intelligence to predict and prevent dental diseases. With our solutions, dentists can offer more
+                accurate, timely diagnoses, ensuring better patient outcomes.</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-white">
+        <div class="max-w-xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-8">Contact Us</h2>
+            <form class="space-y-4">
+                <input type="text" placeholder="Your Name" class="w-full p-4 border border-gray-300 rounded" />
+                <input type="email" placeholder="Your Email" class="w-full p-4 border border-gray-300 rounded" />
+                <textarea placeholder="Your Message" class="w-full p-4 border border-gray-300 rounded"></textarea>
+                <button class="w-full py-4 bg-blue-500 hover:bg-blue-600 text-white rounded">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 bg-gray-800 text-white text-center">
+        <p class="mb-4">Follow us on</p>
+        <div class="flex justify-center space-x-4">
+            <a href="#"><img src="https://via.placeholder.com/24" alt="Facebook" /></a>
+            <a href="#"><img src="https://via.placeholder.com/24" alt="Twitter" /></a>
+            <a href="#"><img src="https://via.placeholder.com/24" alt="LinkedIn" /></a>
+        </div>
+        <p class="mt-4">&copy; 2024 Dentify AI. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>
