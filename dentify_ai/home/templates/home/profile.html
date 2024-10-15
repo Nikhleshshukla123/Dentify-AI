@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'home/dashboard.html' %}
 {% load static %}
 
@@ -27,10 +28,52 @@
     /* Hover effect on buttons */
     .hover-animate:hover {
         transform: translateY(-5px) scale(1.05);
+=======
+{% extends 'home/master.html' %}
+{% load static %}
+
+{% block title %}
+<title>Dentify AI - User Profile</title>
+{% endblock %}
+{% block styles %}
+<style>
+    .profile-header {
+        background: linear-gradient(135deg, #3498db, #8e44ad);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+    .stat-card {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+    .prediction-table {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .prediction-table th {
+        background-color: #3498db;
+        color: white;
+    }
+    .prediction-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    .prediction-table tr:hover {
+        background-color: #e6f3ff;
+>>>>>>> 3af8016accff2e1e8d29937855884a3ae0e90d97
     }
 </style>
 {% endblock %}
 
+<<<<<<< HEAD
 {% block content %}
 <!-- Container for Profile Section with Floating Animation -->
 <div class="float max-w-4xl mx-auto mt-10 bg-white p-8 shadow-lg rounded-lg smooth-transition">
@@ -182,3 +225,65 @@
     }
 </script>
 {% endblock %}
+=======
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h1 class="text-2xl font-bold mb-6">User Profile</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Personal Information</h2>
+                <p><strong>Name:</strong> {{ user.get_full_name }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Joined:</strong> {{ user.date_joined|date:"F d, Y" }}</p>
+            </div>
+            
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Account Statistics</h2>
+                <p><strong>Total Predictions:</strong> {{ predictions_count }}</p>
+                <p><strong>Last Prediction:</strong> 
+                    {% if last_prediction %}
+                        {{ last_prediction.pred_ts|date:"F d, Y H:i" }}
+                    {% else %}
+                        No predictions yet
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold mb-4">Recent Predictions</h2>
+            {% if recent_predictions %}
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 bg-gray-100 font-semibold text-sm text-gray-600 border-b">Date</th>
+                            <th class="py-2 px-4 bg-gray-100 font-semibold text-sm text-gray-600 border-b">Result</th>
+                            <th class="py-2 px-4 bg-gray-100 font-semibold text-sm text-gray-600 border-b">Confidence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prediction in recent_predictions %}
+                        <tr>
+                            <td class="py-2 px-4 border-b">{{ prediction.pred_ts|date:"M d, Y H:i" }}</td>
+                            <td class="py-2 px-4 border-b">{{ prediction.result }}</td>
+                            <td class="py-2 px-4 border-b">{{ prediction.confidence|floatformat:2 }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No predictions available.</p>
+            {% endif %}
+        </div>
+
+        <div class="mt-8">
+            <a href="{% url 'dashboard' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+>>>>>>> 3af8016accff2e1e8d29937855884a3ae0e90d97
