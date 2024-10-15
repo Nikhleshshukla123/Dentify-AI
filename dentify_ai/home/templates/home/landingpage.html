@@ -108,7 +108,7 @@
     filter: drop-shadow(2px 4px 6px black);">Welcome to Dentify AI</h1>
             <p class="text-xl mb-8" style="  background-blend-mode: color;
     filter: drop-shadow(2px 4px 6px black);">Get started with cutting-edge AI solutions for dentistry</p>
-            <button class="px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded text-white">Get Started</button>
+            <a class="px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded text-white" href="{% url 'signup' %} ">Get Started</a>
         </div>
     </section>
     <!-- <section id="home" class="relative flex justify-center items-center h-screen bg-gray-200">
@@ -149,88 +149,30 @@
             <p class="text-lg">Dentify AI is dedicated to revolutionizing dental care by leveraging artificial intelligence to predict and prevent dental diseases. With our solutions, dentists can offer more accurate, timely diagnoses, ensuring better patient outcomes.</p>
         </div>
     </section>
-<!-- contact section  -->
- <section id="contact" class="py-16 bg-gray-50">
-    <div class="max-w-xl mx-auto">
-        <h2 class="text-4xl font-bold text-center mb-10 text-gray-800">Contact Us</h2>
-        <form id="contactForm" class="space-y-6">
-            <div>
-                <input type="text" id="name" placeholder="Your Name" class="w-full p-4 border border-gray-300 rounded focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-300 ease-in-out" required />
-                <p id="nameError" class="text-red-500 text-sm hidden mt-1">Name is required.</p>
-            </div>
-            <div>
-                <input type="email" id="email" placeholder="Your Email" class="w-full p-4 border border-gray-300 rounded focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-300 ease-in-out" required />
-                <p id="emailError" class="text-red-500 text-sm hidden mt-1">Please enter a valid email.</p>
-            </div>
-            <div>
-                <textarea id="message" placeholder="Your Message" class="w-full p-4 border border-gray-300 rounded focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-300 ease-in-out" required></textarea>
-                <p id="messageError" class="text-red-500 text-sm hidden mt-1">Message cannot be empty.</p>
-            </div>
-            <button type="submit" class="w-full py-4 bg-blue-500 hover:bg-blue-600 text-white rounded transition duration-300">Send Message</button>
-        </form>
-    </div>
-
-    <script>
-        const form = document.getElementById('contactForm');
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Validation logic
-            let isValid = true;
-
-            // Name validation
-            const name = document.getElementById('name').value;
-            if (!name) {
-                document.getElementById('nameError').classList.remove('hidden');
-                isValid = false;
-            } else {
-                document.getElementById('nameError').classList.add('hidden');
-            }
-
-            // Email validation
-            const email = document.getElementById('email').value;
-            const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
-            if (!emailPattern.test(email)) {
-                document.getElementById('emailError').classList.remove('hidden');
-                isValid = false;
-            } else {
-                document.getElementById('emailError').classList.add('hidden');
-            }
-
-            // Message validation
-            const message = document.getElementById('message').value;
-            if (!message) {
-                document.getElementById('messageError').classList.remove('hidden');
-                isValid = false;
-            } else {
-                document.getElementById('messageError').classList.add('hidden');
-            }
-
-            // If valid, submit form
-            if (isValid) {
-                alert('Form submitted successfully!');
-                form.reset();
-            }
-        });
-    </script>
-</section>
 
 
-    <!-- Social Media Section -->
-    <section class="py-4 bg-gray-200 text-center">
-        <div class="flex justify-center space-x-6">
+
+    <!-- end of contact section  -->
+
+
+<!-- Footer Section -->
+<footer class="bg-gray-200 py-16 text-center">
+    <section class="text-center">
+        <div class="flex justify-center space-x-6 mb-4">
             <a href="https://www.facebook.com" target="_blank" class="hover:text-blue-500 transition">
-                <img src="{% static 'home/img/facebook.svg' %}" alt="Facebook" width="24">
+                <img src="{% static 'home/img/facebook.png' %}" alt="Facebook" width="40" height="40">
             </a>
             <a href="https://www.twitter.com" target="_blank" class="hover:text-blue-400 transition">
-                <img src="{% static 'home/img/twitter.svg' %}" alt="Twitter" width="24">
+                <img src="{% static 'home/img/twitter.png' %}" alt="Twitter" width="40" height="40">
             </a>
             <a href="https://www.instagram.com" target="_blank" class="hover:text-pink-500 transition">
-                <img src="{% static 'home/img/instagram.svg' %}" alt="Instagram" width="24">
+                <img src="{% static 'home/img/instagram.png' %}" alt="Instagram" width="40" height="40">
             </a>
         </div>
+        <p class="text-gray-600 mt-8">&copy; 2024 Dentify-ai. All rights reserved.</p>
     </section>
-
+</footer>
+<!-- end of footer section -->
     <script>
         document.getElementById('menu-toggle').addEventListener('click', function() {
             const menu = document.getElementById('mobile-menu');
