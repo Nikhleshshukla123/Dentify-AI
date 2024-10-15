@@ -32,3 +32,6 @@ def predict(request):
             return JsonResponse({"message": "Prediction successful"})
     return JsonResponse({"message": "Prediction failed"}, status=400)
 
+@login_required(login_url='login')
+def profile(request):
+    return render(request, 'home/profile.html')
