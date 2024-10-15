@@ -19,6 +19,8 @@ import json
 
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
     if request.method == 'POST':
         dataval = SignupDataValidation(request.POST)
         if dataval.is_valid():  
