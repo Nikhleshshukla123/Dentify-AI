@@ -1,0 +1,184 @@
+{% extends 'home/dashboard.html' %}
+{% load static %}
+
+{% block title %}
+<title>User Profile - Teeth Disease Classification System</title>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Floating Animation */
+    @keyframes floating {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0); }
+    }
+
+    /* Apply floating to the entire container */
+    .float {
+        animation: floating 4s ease-in-out infinite;
+    }
+
+    /* Smooth transitions */
+    .smooth-transition {
+        transition: all 0.3s ease;
+    }
+
+    /* Hover effect on buttons */
+    .hover-animate:hover {
+        transform: translateY(-5px) scale(1.05);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Container for Profile Section with Floating Animation -->
+<div class="float max-w-4xl mx-auto mt-10 bg-white p-8 shadow-lg rounded-lg smooth-transition">
+    <!-- User Information Section -->
+    <div class="flex items-center justify-between">
+        <div class="flex items-center">
+            <!-- Profile Picture -->
+            <img id="profile-picture" class="w-28 h-28 rounded-full shadow-lg transform hover:scale-105 transition duration-300"
+                src="https://via.placeholder.com/150" alt="Profile Picture">
+            <div class="ml-6">
+                <h2 id="user-name" class="text-3xl font-bold text-gray-800">John Doe</h2>
+                <p id="user-email" class="text-gray-600 mt-2">johndoe@example.com</p>
+                <p id="user-age" class="text-gray-600">Age: 35</p>
+                <p id="user-bio" class="mt-2 text-sm text-gray-500">Enthusiast in dental health, exploring AI-based
+                    teeth disease detection.</p>
+            </div>
+        </div>
+        <button id="edit-profile-btn"
+            class="bg-blue-500 hover-animate hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow-md">
+            Edit Profile
+        </button>
+    </div>
+
+    <!-- Edit Profile Form (Hidden by default) -->
+    <form id="edit-profile-form" class="mt-6 hidden" onsubmit="saveProfile(event)">
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                <label class="block text-gray-700">Name:</label>
+                <input type="text" id="name-input"
+                    class="mt-1 block w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 smooth-transition"
+                    placeholder="Enter your name" value="John Doe">
+            </div>
+            <div>
+                <label class="block text-gray-700">Email:</label>
+                <input type="email" id="email-input"
+                    class="mt-1 block w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 smooth-transition"
+                    placeholder="Enter your email" value="johndoe@example.com">
+            </div>
+            <div>
+                <label class="block text-gray-700">Age:</label>
+                <input type="number" id="age-input"
+                    class="mt-1 block w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 smooth-transition"
+                    placeholder="Enter your age" value="35">
+            </div>
+            <div>
+                <label class="block text-gray-700">Bio:</label>
+                <textarea id="bio-input"
+                    class="mt-1 block w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 smooth-transition"
+                    placeholder="Tell something about yourself">Enthusiast in dental health, exploring AI-based teeth disease detection.</textarea>
+            </div>
+            <div class="col-span-2">
+                <label class="block text-gray-700">Upload New Profile Picture:</label>
+                <input type="file" id="profile-picture-input"
+                    class="mt-1 block w-full text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 smooth-transition">
+            </div>
+        </div>
+        <div class="mt-4">
+            <button type="submit"
+                class="bg-green-500 hover-animate hover:bg-green-600 text-white px-5 py-2 rounded-md shadow-md smooth-transition">
+                Save Changes
+            </button>
+            <button type="button" onclick="cancelEdit()"
+                class="ml-4 bg-gray-500 hover-animate hover:bg-gray-600 text-white px-5 py-2 rounded-md shadow-md smooth-transition">
+                Cancel
+            </button>
+        </div>
+    </form>
+
+    <!-- Teeth Image Uploads History -->
+    <div class="mt-10">
+        <h3 class="text-2xl font-bold text-gray-800">Teeth Image Uploads History</h3>
+        <table class="w-full mt-6 table-auto border-collapse">
+            <thead>
+                <tr class="bg-blue-100">
+                    <th class="border px-6 py-4 text-left text-gray-600">Image</th>
+                    <th class="border px-6 py-4 text-left text-gray-600">Upload Date</th>
+                    <th class="border px-6 py-4 text-left text-gray-600">Disease</th>
+                    <th class="border px-6 py-4 text-left text-gray-600">Confidence (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="hover:bg-gray-100 transition duration-200">
+                    <td class="border px-6 py-4">
+                        <img class="w-12 h-12 rounded shadow-md transform hover:scale-110 transition duration-300"
+                            src="https://via.placeholder.com/50" alt="Teeth Image">
+                    </td>
+                    <td class="border px-6 py-4">2024-10-09</td>
+                    <td class="border px-6 py-4">Gingivitis</td>
+                    <td class="border px-6 py-4">87%</td>
+                </tr>
+                <tr class="hover:bg-gray-100 transition duration-200">
+                    <td class="border px-6 py-4">
+                        <img class="w-12 h-12 rounded shadow-md transform hover:scale-110 transition duration-300"
+                            src="https://via.placeholder.com/50" alt="Teeth Image">
+                    </td>
+                    <td class="border px-6 py-4">2024-10-08</td>
+                    <td class="border px-6 py-4">Cavities</td>
+                    <td class="border px-6 py-4">92%</td>
+                </tr>
+                <tr class="hover:bg-gray-100 transition duration-200">
+                    <td class="border px-6 py-4">
+                        <img class="w-12 h-12 rounded shadow-md transform hover:scale-110 transition duration-300"
+                            src="https://via.placeholder.com/50" alt="Teeth Image">
+                    </td>
+                    <td class="border px-6 py-4">2024-10-07</td>
+                    <td class="border px-6 py-4">Plaque</td>
+                    <td class="border px-6 py-4">78%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Show Edit Profile form
+    document.getElementById("edit-profile-btn").addEventListener("click", function () {
+        document.getElementById("edit-profile-form").classList.toggle("hidden");
+    });
+
+    // Function to save profile changes
+    function saveProfile(event) {
+        event.preventDefault();
+
+        // Update user profile details on the page
+        document.getElementById("user-name").textContent = document.getElementById("name-input").value;
+        document.getElementById("user-email").textContent = document.getElementById("email-input").value;
+        document.getElementById("user-age").textContent = "Age: " + document.getElementById("age-input").value;
+        document.getElementById("user-bio").textContent = document.getElementById("bio-input").value;
+
+        // Check if the user uploaded a new profile picture
+        const fileInput = document.getElementById("profile-picture-input");
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById("profile-picture").src = e.target.result;
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+
+        // Hide the edit form
+        document.getElementById("edit-profile-form").classList.add("hidden");
+    }
+
+    // Function to cancel profile edit
+    function cancelEdit() {
+        document.getElementById("edit-profile-form").classList.add("hidden");
+    }
+</script>
+{% endblock %}
