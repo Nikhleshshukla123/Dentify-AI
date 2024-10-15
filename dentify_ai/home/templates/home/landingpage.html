@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,74 +9,18 @@
     <script type="module" crossorigin src="{% static 'home/js/index.js' %}"></script>
     <link rel="stylesheet" crossorigin href="{% static 'home/css/index.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-<<<<<<< HEAD
-=======
     <script src="https://cdn.tailwindcss.com"></script>
->>>>>>> 3af8016accff2e1e8d29937855884a3ae0e90d97
     <style>
         body {
             font-family: 'Roboto', sans-serif;
         }
-<<<<<<< HEAD
-        /* Logo Style */
-        .logo-container {
-            display: flex;
-            align-items: center;
-        }
-        .logo-container .logo-circle {
-            width: 60px; /* Adjust the size of the circle */
-            height: 60px; /* Adjust the size of the circle */
-            background-color: #f3f4f6; /* Default light gray background */
-            border-radius: 50%; /* Circle shape */
-            justify-content: center;
-            align-items: center;
-            display: flex; /* Center the text inside the circle */
-            font-size: 1.5rem; /* Adjust logo font size */
-            font-weight: bold;
-            color: #4F46E5; /* Using the same color as gradient */
-            margin-right: 10px; /* Spacing between logo and text */
-        }
-        /* Interactive Features */
-        .feature-box {
-            background-color: #f8fafc;
-            padding: 16px; /* Reduced padding */
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            min-width: 220px; /* Set minimum width for cards */
-            max-width: 280px; /* Set max width for cards */
-        }
-        .feature-box:hover {
-            transform: translateY(-10px);
-            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
-        }
-        /* Gradient for buttons */
-        .gradient-button {
-            background: linear-gradient(to right, #4f46e5, #3b82f6);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 700;
-            transition: background 0.3s;
-        }
-        .gradient-button:hover {
-            background: linear-gradient(to right, #3b82f6, #4f46e5);
-        }
-=======
->>>>>>> 3af8016accff2e1e8d29937855884a3ae0e90d97
     </style>
 </head>
+
 <body class="bg-gray-100 text-gray-900 overflow-x-hidden">
     <!-- Premium Navbar -->
     <nav class="fixed top-0 w-full z-50 bg-white backdrop-blur-md shadow-md">
-<<<<<<< HEAD
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <!-- Brand Logo -->
-            <div class="logo-container">
-                <div class="logo-circle">
-                    DA
-                </div>
-                <a href="#home" class="text-2xl font-extrabold text-gray-800 hover:text-blue-500 transition duration-300">Dentify AI</a>
-=======
+
         <div class="container mx-auto px-6 py-[8px] flex justify-between items-center">
             <!-- Brand Logo -->
             <div class="flex items-center">
@@ -86,30 +31,38 @@
                 <a href="#home"
                     class="text-2xl font-extrabold text-gray-800 hover:text-blue-500 transition duration-300">Dentify
                     AI</a>
->>>>>>> 3af8016accff2e1e8d29937855884a3ae0e90d97
+
             </div>
             <!-- Navigation Links -->
             <div class="hidden md:flex space-x-8">
-                <a href="#about" class="text-gray-800 font-semibold hover:text-blue-500 transition duration-300">About</a>
-                <a href="#features" class="text-gray-800 font-semibold hover:text-blue-500 transition duration-300">Features</a>
-                <a href="#contact" class="text-gray-800 font-semibold hover:text-blue-500 transition duration-300">Contact</a>
+                <a href="#about"
+                    class="text-gray-800 font-semibold hover:text-blue-500 transition duration-300">About</a>
+                <a href="#features"
+                    class="text-gray-800 font-semibold hover:text-blue-500 transition duration-300">Features</a>
+                <a href="#contact"
+                    class="text-gray-800 font-semibold hover:text-blue-500 transition duration-300">Contact</a>
             </div>
             <!-- Buttons -->
             <div class="flex items-center space-x-4">
-                <a href="{% url 'signup' %}" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow-lg hover:bg-blue-600 transition duration-300">Sign Up</a>
-                <a href="{% url 'login' %}" class="px-4 py-2 text-gray-800 border border-gray-800 rounded-md shadow-lg hover:bg-gray-800 hover:text-white transition duration-300">Login</a>
+                <a href="{% url 'signup' %}"
+                    class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow-lg hover:bg-blue-600 transition duration-300">Sign
+                    Up</a>
+                <a href="{% url 'login' %}"
+                    class="px-4 py-2 text-gray-800 border border-gray-800 rounded-md shadow-lg hover:bg-gray-800 hover:text-white transition duration-300">Login</a>
             </div>
             <!-- Mobile Menu Icon -->
             <div class="md:hidden flex items-center">
                 <button id="menu-toggle" class="focus:outline-none">
-                    <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
             </div>
         </div>
     </nav>
-    
+
     <!-- Mobile Menu (Hidden by default) -->
     <div id="mobile-menu" class="hidden md:hidden bg-white bg-opacity-80 backdrop-blur-md shadow-lg">
         <a href="#about" class="block px-6 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">About</a>
@@ -117,7 +70,7 @@
         <a href="#contact" class="block px-6 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">Contact</a>
     </div>
 
-        <!-- 3D Tooth Model Section with Welcome Text -->
+    <!-- 3D Tooth Model Section with Welcome Text -->
     <section id="home" class="relative flex justify-center items-center h-screen bg-gray-200">
         <!-- 3D Model container -->
         <canvas id="3d-tooth" class="absolute overflow-hidden"></canvas>
@@ -128,22 +81,12 @@
     filter: drop-shadow(2px 4px 6px black);">Welcome to Dentify AI</h1>
             <p class="text-xl mb-8" style="  background-blend-mode: color;
     filter: drop-shadow(2px 4px 6px black);">Get started with cutting-edge AI solutions for dentistry</p>
-<<<<<<< HEAD
-            <a class="px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded text-white" href="{% url 'signup' %} ">Get Started</a>
-=======
+
             <a class="px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded text-white" href="{% url 'signup' %} ">Get
                 Started</a>
->>>>>>> 3af8016accff2e1e8d29937855884a3ae0e90d97
         </div>
     </section>
-    <!-- <section id="home" class="relative flex justify-center items-center h-screen bg-gray-200">
-         Welcome Text Overlay 
-        <div class="relative z-10 text-center">
-            <h1 class="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600 filter drop-shadow-lg">Welcome to Dentify AI</h1>
-            <p class="text-xl mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-blue-500 filter drop-shadow-lg">Get started with cutting-edge AI solutions for dentistry</p>
-            <button class="gradient-button">Get Started</button>
-        </div>
-    </section> -->
+
 
     <!-- Features Section -->
     <section id="features" class="py-16 bg-white">
@@ -151,20 +94,7 @@
             <h2 class="text-4xl font-bold mb-4">Revolutionary AI Features</h2>
             <p class="text-lg mb-8">Discover our innovative solutions that enhance dental care and diagnostics.</p>
         </div>
-<<<<<<< HEAD
-        <div class="flex flex-col md:flex-row justify-center items-center max-w-6xl mx-auto px-4 space-y-8 md:space-y-0 md:space-x-15">
-            <div class="feature-box">
-                <h3 class="text-xl font-bold mb-2">AI-Powered Diagnosis</h3>
-                <p class="text-gray-600 text-sm">Our AI system analyzes dental X-rays to predict potential issues, allowing for proactive care.</p>
-            </div>
-            <div class="feature-box">
-                <h3 class="text-xl font-bold mb-2">Real-Time Analytics</h3>
-                <p class="text-gray-600 text-sm">Get instant insights on patient data and treatment efficacy, helping you make informed decisions.</p>
-            </div>
-            <div class="feature-box">
-                <h3 class="text-xl font-bold mb-2">Enhanced Patient Interaction</h3>
-                <p class="text-gray-600 text-sm">Our platform facilitates better communication between dentists and patients.</p>
-=======
+
         <div
             class="flex flex-col md:flex-row justify-center items-center max-w-6xl mx-auto px-4 space-y-8 md:space-y-0 md:space-x-15">
             <div
@@ -184,7 +114,6 @@
                 <h3 class="text-xl font-bold mb-2">Enhanced Patient Interaction</h3>
                 <p class="text-gray-600 text-sm">Our platform facilitates better communication between dentists and
                     patients.</p>
->>>>>>> 3af8016accff2e1e8d29937855884a3ae0e90d97
             </div>
         </div>
     </section>
@@ -193,30 +122,7 @@
     <section id="about" class="py-16 bg-gray-100">
         <div class="text-center max-w-4xl mx-auto">
             <h2 class="text-3xl font-bold mb-4">About Dentify AI</h2>
-<<<<<<< HEAD
-            <p class="text-lg">Dentify AI is dedicated to revolutionizing dental care by leveraging artificial intelligence to predict and prevent dental diseases. With our solutions, dentists can offer more accurate, timely diagnoses, ensuring better patient outcomes.</p>
-        </div>
-    </section>
 
-
-
-    <!-- end of contact section  -->
-
-
-<!-- Footer Section -->
-<footer class="bg-gray-200 py-16 text-center">
-    <section class="text-center">
-        <div class="flex justify-center space-x-6 mb-4">
-            <a href="https://www.facebook.com" target="_blank" class="hover:text-blue-500 transition">
-                <img src="{% static 'home/img/facebook.png' %}" alt="Facebook" width="40" height="40">
-            </a>
-            <a href="https://www.twitter.com" target="_blank" class="hover:text-blue-400 transition">
-                <img src="{% static 'home/img/twitter.png' %}" alt="Twitter" width="40" height="40">
-            </a>
-            <a href="https://www.instagram.com" target="_blank" class="hover:text-pink-500 transition">
-                <img src="{% static 'home/img/instagram.png' %}" alt="Instagram" width="40" height="40">
-            </a>
-=======
             <p class="text-lg">Dentify AI is dedicated to revolutionizing dental care by leveraging artificial
                 intelligence to predict and prevent dental diseases. With our solutions, dentists can offer more
                 accurate, timely diagnoses, ensuring better patient outcomes.</p>
@@ -224,7 +130,7 @@
     </section>
 
     <!-- contact section  -->
-    <section id="concact" class="py-16">
+    <section id="contact" class="py-16">
         <h2 class="text-3xl font-bold mb-4 text-center">Drop Your Message for Dentify AI</h2>
         <div class="my-6">
             <div
@@ -249,7 +155,7 @@
                                 </div>
                                 <a target="blank" href="#" class="text-[#007bff] text-sm ml-3">
                                     <small class="block">Mail</small>
-                                    <strong>https://gmail.com</strong>
+                                    <strong>dentify.ai@gmail.com</strong>
                                 </a>
                             </li>
                         </ul>
@@ -304,16 +210,9 @@
                         class="text-white bg-[#007bff] hover:bg-blue-600 font-semibold rounded-md text-sm px-4 py-2.5 w-full">Send</button>
                 </form>
             </div>
->>>>>>> 3af8016accff2e1e8d29937855884a3ae0e90d97
         </div>
-        <p class="text-gray-600 mt-8">&copy; 2024 Dentify-ai. All rights reserved.</p>
     </section>
-<<<<<<< HEAD
-</footer>
-<!-- end of footer section -->
-    <script>
-        document.getElementById('menu-toggle').addEventListener('click', function() {
-=======
+
     <!-- end of contact section  -->
 
 
@@ -354,10 +253,11 @@
     <!-- end of footer section -->
     <script>
         document.getElementById('menu-toggle').addEventListener('click', function () {
->>>>>>> 3af8016accff2e1e8d29937855884a3ae0e90d97
+
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
         });
     </script>
 </body>
+
 </html>

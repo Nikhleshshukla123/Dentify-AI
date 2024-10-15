@@ -1,80 +1,13 @@
 {% extends 'home/master.html' %}
 
-{% block title %}Dashboard - Teeth Disease Classification System{% endblock %}
+{% block title %}
+<title>
+  Dashboard - Teeth Disease Classification System
+</title>
+{% endblock %}
 
-<<<<<<< HEAD
-{% block content %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6">Welcome, {{ user.get_full_name }}</h1>
+{% block body %}
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- User Profile Card -->
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <img class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-blue-500" src="{{ user.profile_picture.url|default:'https://via.placeholder.com/150' }}" alt="Profile Picture">
-            <h2 class="text-xl font-semibold text-center mb-2">{{ user.get_full_name }}</h2>
-            <p class="text-gray-600 text-center mb-1">{{ user.email }}</p>
-            <p class="text-gray-600 text-center">Age: {{ user.age }}</p>
-        </div>
-
-        <!-- Upload New Image Card -->
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Upload New Image</h3>
-            <form action="{% url 'predict' %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="mb-4">
-                    <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg class="w-8 h-8 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                            <p class="text-sm text-gray-500">Click to upload or drag and drop</p>
-                        </div>
-                        <input id="dropzone-file" type="file" name="xray_file" class="hidden" />
-                    </label>
-                </div>
-                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">Upload and Predict</button>
-            </form>
-        </div>
-
-        <!-- Quick Stats Card -->
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Quick Stats</h3>
-            <p class="mb-2">Total Predictions: {{ predictions.count }}</p>
-            <p class="mb-2">Last Prediction: {% if predictions.first %}{{ predictions.first.pred_ts|date:"Y-m-d" }}{% else %}N/A{% endif %}</p>
-            <!-- Add more stats as needed -->
-        </div>
-    </div>
-
-    <!-- Recent Predictions Table -->
-    <div class="mt-8">
-        <h3 class="text-2xl font-semibold mb-4">Recent Predictions</h3>
-        <div class="overflow-x-auto bg-white rounded-lg shadow">
-            <table class="w-full table-auto">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Disease</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Confidence (%)</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    {% for prediction in predictions %}
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <img class="w-16 h-16 rounded-md object-cover" src="{{ prediction.xray_file.url }}" alt="Teeth Image">
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ prediction.pred_ts|date:"Y-m-d" }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ prediction.result }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ prediction.confidence|floatformat:0 }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="4" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">No predictions available</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-=======
 {% if messages %}
 <section class="messages absolute w-[100%]" style="z-index: 5;">
   {% for message in messages %}
@@ -112,151 +45,147 @@
         class="bg-green-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-green-600 transition duration-300">
         Predict
       </button>
->>>>>>> 3af8016accff2e1e8d29937855884a3ae0e90d97
     </div>
-</div>
-<<<<<<< HEAD
-{% endblock %}
-=======
-
-<div class="container p-0">
-  <div class="overflow-x-hidden shadow-md rounded-lg box-border bg-[white]">
-    <h2 class="text-2xl font-bold p-[25px]" style="border-bottom: 2px solid lightgrey;">Prediction History</h2>
-    <div class="flex flex-col sm:flex-row justify-between items-center p-4 bg-[white] border-b">
-      <input type="text" id="search" placeholder="Search by Result"
-        class="mb-2 sm:mb-0 px-3 py-1 w-full sm:w-64 bg-gray-50 border rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
-        onkeyup="searchTable()">
-      <div class="flex items-center space-x-2 text-sm">
-        <button
-          class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-          {% if not previous_page %}disabled{% endif %}>Prev</button>
-        <span class="text-gray-700">Page {{ current_page }}/{{ total_pages }}</span>
-        <button
-          class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-          {% if not next_page %}disabled{% endif %}>Next</button>
-      </div>
-    </div>
-    <table class="w-full text-xs text-left text-gray-500">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-100">
-        <tr>
-          <th scope="col" class="px-4 py-2">#</th>
-          <th scope="col" class="px-4 py-2">Image</th>
-          <th scope="col" class="px-4 py-2">Date</th>
-          <th scope="col" class="px-4 py-2">Result</th>
-          <th scope="col" class="px-4 py-2">Confidence</th>
-          <th scope="col" class="px-4 py-2">Message</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for prediction in history %}
-        <tr class="bg-[white] border-ber:bg-gray-50">
-          <td class="px-4 py-2">{{ forloop.counter }}</td>
-          <td class="px-4 py-2">
-            <img src="{{ prediction.xray_file.url }}" alt="Prediction" class="w-16 h-16 object-cover rounded shadow-sm">
-          </td>
-          <td class="px-4 py-2">{{ prediction.pred_ts|date:"M d, Y H:i" }}</td>
-          <td class="px-4 py-2">{{ prediction.result }}</td>
-          <td class="px-4 py-2">{{ prediction.confidence|floatformat:2 }}%</td>
-          <td class="px-4 py-2">{{ prediction.message|truncatechars:30 }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
   </div>
-  {% endblock %}
 
-  {% block script %}
-  <script>
+  <div class="container p-0">
+    <div class="overflow-x-hidden shadow-md rounded-lg box-border bg-[white]">
+      <h2 class="text-2xl font-bold p-[25px]" style="border-bottom: 2px solid lightgrey;">Prediction History</h2>
+      <div class="flex flex-col sm:flex-row justify-between items-center p-4 bg-[white] border-b">
+        <input type="text" id="search" placeholder="Search by Result"
+          class="mb-2 sm:mb-0 px-3 py-1 w-full sm:w-64 bg-gray-50 border rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
+          onkeyup="searchTable()">
+        <div class="flex items-center space-x-2 text-sm">
+          <button
+            class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+            {% if not previous_page %}disabled{% endif %}>Prev</button>
+          <span class="text-gray-700">Page {{ current_page }}/{{ total_pages }}</span>
+          <button
+            class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+            {% if not next_page %}disabled{% endif %}>Next</button>
+        </div>
+      </div>
+      <table class="w-full text-xs text-left text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+          <tr>
+            <th scope="col" class="px-4 py-2">#</th>
+            <th scope="col" class="px-4 py-2">Image</th>
+            <th scope="col" class="px-4 py-2">Date</th>
+            <th scope="col" class="px-4 py-2">Result</th>
+            <th scope="col" class="px-4 py-2">Confidence</th>
+            <th scope="col" class="px-4 py-2">Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for prediction in history %}
+          <tr class="bg-[white] border-ber:bg-gray-50">
+            <td class="px-4 py-2">{{ forloop.counter }}</td>
+            <td class="px-4 py-2">
+              <img src="{{ prediction.xray_file.url }}" alt="Prediction"
+                class="w-16 h-16 object-cover rounded shadow-sm">
+            </td>
+            <td class="px-4 py-2">{{ prediction.pred_ts|date:"M d, Y H:i" }}</td>
+            <td class="px-4 py-2">{{ prediction.result }}</td>
+            <td class="px-4 py-2">{{ prediction.confidence|floatformat:2 }}%</td>
+            <td class="px-4 py-2">{{ prediction.message|truncatechars:30 }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endblock %}
 
-    const dropzone = document.getElementById('dropzone');
-    const fileInput = document.getElementById('fileInput');
-    const imagePreviewSection = document.getElementById('imagePreview-section');
-    const imagePreview = document.getElementById('imagePreview');
-    const fileName = document.getElementById('fileName');
-    let xray_file = null;
-    async function handleFileSelect(files) {
-      if (files.length > 0) {
-        image = URL.createObjectURL(files[0])
-        imagePreview.src = image;
-        name = files[0].name.slice(0, 10) + ' *.' + (files[0].name).split('.').pop();
-        fileName.textContent = name;
-        imagePreviewSection.style.display = 'flex';
-        xray_file = files[0];
-      }
-      else {
-        imagePreviewSection.style.display = 'none';
-        xray_file = null;
-      }
-    }
-    async function predictImage() {
-      const formData = new FormData();
-      formData.append('xray_file', xray_file);
+    {% block script %}
+    <script>
 
-      try {
-        const response = await fetch('{% url "predict" %}', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (response.ok) {
-          const result = await response.json(); // Assuming the response is JSON
-          alert('Prediction successful');
-          console.log(result);
-          // Handle the prediction response
-        } else {
-          const errorData = await response.json();
-          alert('Prediction failed: ' + errorData.error);
+      const dropzone = document.getElementById('dropzone');
+      const fileInput = document.getElementById('fileInput');
+      const imagePreviewSection = document.getElementById('imagePreview-section');
+      const imagePreview = document.getElementById('imagePreview');
+      const fileName = document.getElementById('fileName');
+      let xray_file = null;
+      async function handleFileSelect(files) {
+        if (files.length > 0) {
+          image = URL.createObjectURL(files[0])
+          imagePreview.src = image;
+          name = files[0].name.slice(0, 10) + ' *.' + (files[0].name).split('.').pop();
+          fileName.textContent = name;
+          imagePreviewSection.style.display = 'flex';
+          xray_file = files[0];
         }
-      } catch (error) {
-        console.error('Error:', error);
+        else {
+          imagePreviewSection.style.display = 'none';
+          xray_file = null;
+        }
       }
-    }
+      async function predictImage() {
+        const formData = new FormData();
+        formData.append('xray_file', xray_file);
 
-    function dropHandler(e) {
-      e.preventDefault();
-      const data = e.dataTransfer;
-      console.log(e.dataTransfer.files, data);
-      if (e.dataTransfer.items) {
-        for (const item of e.dataTransfer.items) {
-          if (item.kind === 'file') {
-            const file = item.getAsFile();
+        try {
+          const response = await fetch('{% url "predict" %}', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (response.ok) {
+            const result = await response.json(); // Assuming the response is JSON
+            alert('Prediction successful');
+            console.log(result);
+            // Handle the prediction response
+          } else {
+            const errorData = await response.json();
+            alert('Prediction failed: ' + errorData.error);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+
+      function dropHandler(e) {
+        e.preventDefault();
+        const data = e.dataTransfer;
+        console.log(e.dataTransfer.files, data);
+        if (e.dataTransfer.items) {
+          for (const item of e.dataTransfer.items) {
+            if (item.kind === 'file') {
+              const file = item.getAsFile();
+              handleFileSelect([file]);
+            }
+          }
+        } else {
+          for (const file of e.dataTransfer.files) {
             handleFileSelect([file]);
           }
         }
-      } else {
-        for (const file of e.dataTransfer.files) {
-          handleFileSelect([file]);
-        }
       }
-    }
 
-    function dragOverHandler(e) {
-      e.preventDefault();
-    }
+      function dragOverHandler(e) {
+        e.preventDefault();
+      }
 
-    function searchTable() {
-      var input, filter, table, tr, td, i, txtValue;
-      input = document.getElementById("search");
-      filter = input.value.trim().toLowerCase();
-      table = document.querySelector("table");
-      tr = table.getElementsByTagName("tr");
-      for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[3]; // Index 3 corresponds to the "Result" column
-        if (td) {
-          txtValue = td.textContent || td.innerText;
-          if (txtValue.toLowerCase().includes(filter)) {
-            tr[i].style.display = "";
-            td.style.backgroundColor = "yellow";
-            setTimeout((td) => {
+      function searchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search");
+        filter = input.value.trim().toLowerCase();
+        table = document.querySelector("table");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[3]; // Index 3 corresponds to the "Result" column
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toLowerCase().includes(filter)) {
+              tr[i].style.display = "";
+              td.style.backgroundColor = "yellow";
+              setTimeout((td) => {
+                td.style.backgroundColor = "";
+              }, 100, td);
+            } else {
+              tr[i].style.display = "none";
               td.style.backgroundColor = "";
-            }, 100, td);
-          } else {
-            tr[i].style.display = "none";
-            td.style.backgroundColor = "";
+            }
           }
         }
       }
-    }
-  </script>
-  {% endblock %}
->>>>>>> 3af8016accff2e1e8d29937855884a3ae0e90d97
+    </script>
+    {% endblock %}
