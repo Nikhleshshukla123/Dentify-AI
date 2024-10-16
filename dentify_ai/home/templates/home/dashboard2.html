@@ -1,0 +1,174 @@
+{% extends 'home/master.html' %}
+
+{% block title %}
+<title>
+  Dashboard - Teeth Disease Classification System
+</title>
+{% endblock %}
+
+{% block body %}
+<section class="messages absolute w-[100%]" style="z-index: 5;">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="this.parentNode.remove(true)"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+</section>
+
+<div class="container items-center justify-center px-4 py-8 bg-[white] rounded-lg shadow-md max-h-fit aspect-[15/12]">
+  <div class="mb-8">
+    <h2 class="text-2xl font-bold mb-4">Upload X-ray for Prediction</h2>
+    <label id="dropzone" class="upload-dropzone" for="fileInput" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+      <p class="text-gray-600 mb-2">Drag and drop your X-ray image here</p>
+      <p class="text-sm text-gray-500">or</p>
+      <span class="btn btn-primary mt-2">Select File</span>
+    </label>
+    <input id="fileInput" type="file" hidden accept="image/*" onchange="handleFileSelect(this.files)">
+    <div id="imagePreview-section" class="hidden image-preview mt-4">
+      <img id="imagePreview" class="image-preview-img">
+      <p id="fileName" class="file-info"></p>
+      <button id="predictButton" onclick="predictImage()" class="btn btn-success">Predict</button>
+    </div>
+  </div>
+
+  <div class="prediction-history">
+    <h2 class="history-title">Prediction History</h2>
+    <div class="search-and-pagination">
+      <input type="text" id="search" placeholder="Search by Result" class="search-input" onkeyup="searchTable()">
+      <div class="pagination">
+        <button class="pagination-btn" {% if not previous_page %}disabled{% endif %}>Prev</button>
+        <span class="page-info">Page /</span>
+        <button class="pagination-btn" {% if not next_page %}disabled{% endif %}>Next</button>
+      </div>
+    </div>
+    <table class="history-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Image</th>
+          <th>Date</th>
+          <th>Result</th>
+          <th>Confidence</th>
+          <th>Message</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for prediction in history %}
+          <tr class="prediction-row">
+            <td></td>
+            <td><img src="{{ prediction.image_url }}" alt="Prediction" class="prediction-image"></td>
+            <td>{{ prediction.date }}</td>
+            <td>{{ prediction.result }}</td>
+            <td>{{ prediction.confidence }}%</td>
+            <td>{{ prediction.message }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('fileInput');
+  const imagePreviewSection = document.getElementById('imagePreview-section');
+  const imagePreview = document.getElementById('imagePreview');
+  const fileName = document.getElementById('fileName');
+  let xray_file = null;
+
+  async function handleFileSelect(files) {
+    if (files.length > 0) {
+      const imageUrl = URL.createObjectURL(files[0]);
+      imagePreview.src = imageUrl;
+      const name = files[0].name.slice(0, 10) + ' *.' + files[0].name.split('.').pop();
+      fileName.textContent = name;
+      imagePreviewSection.classList.remove('hidden');
+      xray_file = files[0];
+    } else {
+      imagePreviewSection.classList.add('hidden');
+      xray_file = null;
+    }
+  }
+
+  async function predictImage() {
+    if (!xray_file) {
+      alert('Please upload an X-ray image first.');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('xray_file', xray_file);
+
+    try {
+      const response = await fetch('{% url "predict" %}', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert('Prediction successful: ' + result.message);
+        // Handle the display of prediction results
+        updateHistoryTable(result.data);
+      } else {
+        alert('Prediction failed: ' + result.error);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while predicting the image.');
+    }
+  }
+
+  function dropHandler(e) {
+    e.preventDefault();
+    const data = e.dataTransfer;
+    if (data.items) {
+      for (const item of data.items) {
+        if (item.kind === 'file') {
+          const file = item.getAsFile();
+          handleFileSelect([file]);
+        }
+      }
+    } else {
+      handleFileSelect(data.files);
+    }
+  }
+
+  function dragOverHandler(e) {
+    e.preventDefault();
+  }
+
+  function searchTable() {
+    const input = document.getElementById("search");
+    const filter = input.value.trim().toLowerCase();
+    const table = document.querySelector("table");
+    const tr = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < tr.length; i++) { // Start from 1 to skip header row
+      const td = tr[i].getElementsByTagName("td")[3]; // Index 3 corresponds to the "Result" column
+      if (td) {
+        const txtValue = td.textContent || td.innerText;
+        tr[i].style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
+      }
+    }
+  }
+
+  function updateHistoryTable(data) {
+    const tableBody = document.querySelector(".history-table tbody");
+    const newRow = `<tr class="prediction-row">
+                      <td></td>
+                      <td><img src="${data.image_url}" alt="Prediction" class="prediction-image"></td>
+                      <td>${data.date}</td>
+                      <td>${data.result}</td>
+                      <td>${data.confidence}%</td>
+                      <td>${data.message}</td>
+                    </tr>`;
+    tableBody.insertAdjacentHTML('afterbegin', newRow); // Add new prediction at the top
+  }
+</script>
+{% endblock %}
