@@ -1,174 +1,110 @@
-{% extends 'home/master.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dentify-AI Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow">
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <div class="flex items-center">
+                <div class="bg-white rounded-full p-2 shadow-md">
+                    <span class="text-2xl font-bold text-blue-500">DA</span>
+                </div>
+                <h1 class="text-2xl font-bold ml-2">Dentify-AI</h1>
+            </div>
+            <div>
+                <a href="/profile" class="text-gray-700 hover:text-blue-500 mx-4">Profile</a>
+                <a href="/logout" class="text-gray-700 hover:text-blue-500">Logout</a>
+            </div>
+        </div>
+    </nav>
 
-{% block title %}
-<title>
-  Dashboard - Teeth Disease Classification System
-</title>
-{% endblock %}
+    <div class="container mx-auto p-4 pt-6 md:p-6 lg:p-12">
+        <!-- Input Section -->
+        <div class="flex justify-center mb-6">
+            <div class="bg-white shadow-lg p-6 rounded-lg transition-transform transform hover:scale-105">
+                <h2 class="text-3xl font-bold mb-4 text-center text-blue-600">Upload Dental X-Ray for Prediction</h2>
+                <form id="upload-form" class="mb-4">
+                    <div class="flex justify-center mb-4">
+                        <input type="file" id="xray-input" class="block w-full pl-10 text-sm text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <div class="flex justify-center">
+                        <button type="submit" id="predict-button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200 ease-in-out transform hover:scale-105">Predict</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-{% block body %}
-<section class="messages absolute w-[100%]" style="z-index: 5;">
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
-        <strong>{{ message }}</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="this.parentNode.remove(true)"></button>
-      </div>
-    {% endfor %}
-  {% endif %}
-</section>
+        <!-- Prediction Output Section -->
+        <div id="prediction-output" class="mt-6 hidden">
+            <h2 class="text-2xl font-bold mb-2">Prediction Result</h2>
+            <p id="prediction-result" class="text-lg"></p>
+        </div>
 
-<div class="container items-center justify-center px-4 py-8 bg-[white] rounded-lg shadow-md max-h-fit aspect-[15/12]">
-  <div class="mb-8">
-    <h2 class="text-2xl font-bold mb-4">Upload X-ray for Prediction</h2>
-    <label id="dropzone" class="upload-dropzone" for="fileInput" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
-      <p class="text-gray-600 mb-2">Drag and drop your X-ray image here</p>
-      <p class="text-sm text-gray-500">or</p>
-      <span class="btn btn-primary mt-2">Select File</span>
-    </label>
-    <input id="fileInput" type="file" hidden accept="image/*" onchange="handleFileSelect(this.files)">
-    <div id="imagePreview-section" class="hidden image-preview mt-4">
-      <img id="imagePreview" class="image-preview-img">
-      <p id="fileName" class="file-info"></p>
-      <button id="predictButton" onclick="predictImage()" class="btn btn-success">Predict</button>
+        <div class="mt-6">
+            <h2 class="text-2xl font-bold mb-2">Previous Predictions</h2>
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 border-b">Serial No</th>
+                        <th class="py-2 px-4 border-b">Username</th>
+                        <th class="py-2 px-4 border-b">Time of Input</th>
+                        <th class="py-2 px-4 border-b">Prediction Report</th>
+                    </tr>
+                </thead>
+                <tbody id="prediction-history" class="text-center">
+                    <!-- List of previous predictions will be displayed here -->
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
 
-  <div class="prediction-history">
-    <h2 class="history-title">Prediction History</h2>
-    <div class="search-and-pagination">
-      <input type="text" id="search" placeholder="Search by Result" class="search-input" onkeyup="searchTable()">
-      <div class="pagination">
-        <button class="pagination-btn" {% if not previous_page %}disabled{% endif %}>Prev</button>
-        <span class="page-info">Page /</span>
-        <button class="pagination-btn" {% if not next_page %}disabled{% endif %}>Next</button>
-      </div>
-    </div>
-    <table class="history-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Image</th>
-          <th>Date</th>
-          <th>Result</th>
-          <th>Confidence</th>
-          <th>Message</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for prediction in history %}
-          <tr class="prediction-row">
-            <td></td>
-            <td><img src="{{ prediction.image_url }}" alt="Prediction" class="prediction-image"></td>
-            <td>{{ prediction.date }}</td>
-            <td>{{ prediction.result }}</td>
-            <td>{{ prediction.confidence }}%</td>
-            <td>{{ prediction.message }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</div>
-
-{% endblock %}
-
-{% block script %}
+    <footer class="bg-gray-200 p-4 text-center text-sm text-gray-600">
+        &copy; 2023 Dentify-AI. All rights reserved.
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
 <script>
-  const dropzone = document.getElementById('dropzone');
-  const fileInput = document.getElementById('fileInput');
-  const imagePreviewSection = document.getElementById('imagePreview-section');
-  const imagePreview = document.getElementById('imagePreview');
-  const fileName = document.getElementById('fileName');
-  let xray_file = null;
+  const uploadForm = document.getElementById('upload-form');
+  const xrayInput = document.getElementById('xray-input');
+  const predictionHistory = document.getElementById('prediction-history');
+  const predictionOutput = document.getElementById('prediction-output');
+  const predictionResult = document.getElementById('prediction-result');
 
-  async function handleFileSelect(files) {
-    if (files.length > 0) {
-      const imageUrl = URL.createObjectURL(files[0]);
-      imagePreview.src = imageUrl;
-      const name = files[0].name.slice(0, 10) + ' *.' + files[0].name.split('.').pop();
-      fileName.textContent = name;
-      imagePreviewSection.classList.remove('hidden');
-      xray_file = files[0];
-    } else {
-      imagePreviewSection.classList.add('hidden');
-      xray_file = null;
-    }
-  }
+  uploadForm.addEventListener('submit', async (event) => {
+      event.preventDefault(); // Prevent form submission
+      const formData = new FormData();
+      formData.append('xray-input', xrayInput.files[0]);
 
-  async function predictImage() {
-    if (!xray_file) {
-      alert('Please upload an X-ray image first.');
-      return;
-    }
-    const formData = new FormData();
-    formData.append('xray_file', xray_file);
+      try {
+          const response = await fetch('/predict', {
+              method: 'POST',
+              body: formData
+          });
+          const result = await response.json();
+          
+          // Display the prediction result
+          predictionOutput.classList.remove('hidden');
+          predictionResult.textContent = `Prediction: ${result.prediction}`;
 
-    try {
-      const response = await fetch('{% url "predict" %}', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        alert('Prediction successful: ' + result.message);
-        // Handle the display of prediction results
-        updateHistoryTable(result.data);
-      } else {
-        alert('Prediction failed: ' + result.error);
+          // Add the prediction to the history table
+          const predictionElement = document.createElement('tr');
+          predictionElement.innerHTML = `
+              <td class="py-2 px-4 border-b">${result.serial_no}</td>
+              <td class="py-2 px-4 border-b">${result.username}</td>
+              <td class="py-2 px-4 border-b">${result.timestamp}</td>
+              <td class="py-2 px-4 border-b">${result.prediction}</td>
+          `;
+          predictionHistory.appendChild(predictionElement);
+      } catch (error) {
+          console.error('Error:', error);
       }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred while predicting the image.');
-    }
-  }
-
-  function dropHandler(e) {
-    e.preventDefault();
-    const data = e.dataTransfer;
-    if (data.items) {
-      for (const item of data.items) {
-        if (item.kind === 'file') {
-          const file = item.getAsFile();
-          handleFileSelect([file]);
-        }
-      }
-    } else {
-      handleFileSelect(data.files);
-    }
-  }
-
-  function dragOverHandler(e) {
-    e.preventDefault();
-  }
-
-  function searchTable() {
-    const input = document.getElementById("search");
-    const filter = input.value.trim().toLowerCase();
-    const table = document.querySelector("table");
-    const tr = table.getElementsByTagName("tr");
-
-    for (let i = 1; i < tr.length; i++) { // Start from 1 to skip header row
-      const td = tr[i].getElementsByTagName("td")[3]; // Index 3 corresponds to the "Result" column
-      if (td) {
-        const txtValue = td.textContent || td.innerText;
-        tr[i].style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
-      }
-    }
-  }
-
-  function updateHistoryTable(data) {
-    const tableBody = document.querySelector(".history-table tbody");
-    const newRow = `<tr class="prediction-row">
-                      <td></td>
-                      <td><img src="${data.image_url}" alt="Prediction" class="prediction-image"></td>
-                      <td>${data.date}</td>
-                      <td>${data.result}</td>
-                      <td>${data.confidence}%</td>
-                      <td>${data.message}</td>
-                    </tr>`;
-    tableBody.insertAdjacentHTML('afterbegin', newRow); // Add new prediction at the top
-  }
-</script>
-{% endblock %}
+  });
+    </script>
+</body>
+</html>
