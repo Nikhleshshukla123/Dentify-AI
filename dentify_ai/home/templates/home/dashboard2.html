@@ -5,6 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dentify-AI Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+     <style>
+      body {
+    font-family: Arial, sans-serif;
+}
+
+#prediction-output {
+    display: none;
+}
+
+#prediction-image {
+    width: 50%;
+    height: auto;
+    margin: 20px auto;
+    display: block;
+}
+
+#prediction-history {
+    margin-top: 20px;
+}
+
+#prediction-history tr {
+    border-bottom: 1px solid #ddd;
+}
+
+#prediction-history tr:last-child {
+    border-bottom: none;
+}
+
+#prediction-history td {
+    padding: 10px
+} </style>
 </head>
 <body class="bg-gray-100">
     <!-- Navigation Bar -->
@@ -43,8 +75,10 @@
         <div id="prediction-output" class="mt-6 hidden">
             <h2 class="text-2xl font-bold mb-2">Prediction Result</h2>
             <p id="prediction-result" class="text-lg"></p>
+            <img id="prediction-image" src="" alt="Predicted Image">
         </div>
 
+        <!-- Previous Predictions Section -->
         <div class="mt-6">
             <h2 class="text-2xl font-bold mb-2">Previous Predictions</h2>
             <table class="min-w-full bg-white border border-gray-300">
@@ -67,44 +101,5 @@
         &copy; 2023 Dentify-AI. All rights reserved.
     </footer>
     <script src="script.js"></script>
-</body>
-</html>
-<script>
-  const uploadForm = document.getElementById('upload-form');
-  const xrayInput = document.getElementById('xray-input');
-  const predictionHistory = document.getElementById('prediction-history');
-  const predictionOutput = document.getElementById('prediction-output');
-  const predictionResult = document.getElementById('prediction-result');
-
-  uploadForm.addEventListener('submit', async (event) => {
-      event.preventDefault(); // Prevent form submission
-      const formData = new FormData();
-      formData.append('xray-input', xrayInput.files[0]);
-
-      try {
-          const response = await fetch('/predict', {
-              method: 'POST',
-              body: formData
-          });
-          const result = await response.json();
-          
-          // Display the prediction result
-          predictionOutput.classList.remove('hidden');
-          predictionResult.textContent = `Prediction: ${result.prediction}`;
-
-          // Add the prediction to the history table
-          const predictionElement = document.createElement('tr');
-          predictionElement.innerHTML = `
-              <td class="py-2 px-4 border-b">${result.serial_no}</td>
-              <td class="py-2 px-4 border-b">${result.username}</td>
-              <td class="py-2 px-4 border-b">${result.timestamp}</td>
-              <td class="py-2 px-4 border-b">${result.prediction}</td>
-          `;
-          predictionHistory.appendChild(predictionElement);
-      } catch (error) {
-          console.error('Error:', error);
-      }
-  });
-    </script>
 </body>
 </html>
