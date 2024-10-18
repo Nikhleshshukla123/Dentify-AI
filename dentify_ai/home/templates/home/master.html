@@ -18,12 +18,94 @@
 </head>
 
 <body>
-    <header class="h-[50px] sticky top-0">
-    </header>
-    <main class="flex w-[94vw] mx-auto gap-5">
-        {% block body %}{% endblock %}
-    </main>
-    {% block footer %}{% endblock %}
+    <nav class="fixed top-0 w-full z-50 bg-[white] shadow-md">
+
+        <div class="container mx-auto px-6 py-[8px] flex justify-between items-center">
+            <!-- Brand Logo -->
+            <div class="flex items-center">
+                <div
+                    class="w-[50px] aspect-square bg-gray-100 rounded-full flex justify-center items-center text-2xl font-bold text-indigo-600 mr-2.5">
+                    DA
+                </div>
+                <a href="{% url 'dashboard' %}"
+                    class="text-2xl font-extrabold text-gray-800 hover:text-blue-500 transition duration-300">Dentify
+                    AI</a>
+
+            </div>
+            <!-- Navigation Links -->
+            <div class="hidden md:flex space-x-8">
+                <a href="{% url 'dashboard' %}"
+                    class="text-gray-800 font-semibold hover:text-blue-500 transition duration-300">Dashboard</a>
+                {% if request.user.is_superuser %}
+                <a href="{% url 'admin:index' %}"
+                    class="text-gray-800 font-semibold hover:text-blue-500 transition duration-300">Admin Panel</a>
+                {% endif %}
+            </div>
+            <!-- Buttons -->
+            <div class="flex items-center space-x-4">
+                <a href="{% url 'profile' %}" class="flex items-center space-x-2 group relative">
+                    {% if request.user.profile_pic %}
+                    <img src="{{ request.user.profile_pic.url }}" alt="Profile Picture"
+                        class="w-10 h-10 rounded-full object-cover">
+                    {% else %}
+                    <div
+                        class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold text-lg capitalize">
+                        {{ request.user.first_name|first }}{{ request.user.last_name|first }}
+                    </div>
+                    {% endif %}
+                    <div
+                        class="absolute bottom-[-57px] left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                        {{ request.user.get_full_name }}<br>{{ request.user.email }}
+                    </div>
+                </a>
+                <a href="{% url 'logout' %}"
+                    class="px-4 py-2 text-gray-800 border border-gray-800 rounded-md shadow-md hover:bg-gray-800 hover:text-white transition duration-300">Logout</a>
+            </div>
+            <!-- Mobile Menu Icon -->
+            <div class="md:hidden flex items-center">
+                <button id="menu-toggle" class="focus:outline-none">
+                    <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <!-- <main class="flex w-[94vw] mx-auto gap-5"> -->
+    {% block body %}{% endblock %}
+    <!-- </main> -->
+    <footer class="bg-gray-100 py-8 mt-16 w-full">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-between w-10/12 mx-auto">
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">Dentify AI</h3>
+                    <p class="text-sm">Revolutionizing dental diagnostics with artificial intelligence.</p>
+                </div>
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">Follow Us</h3>
+                    <ul class="text-sm">
+                        <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">Facebook</a></li>
+                        <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">Twitter</a></li>
+                        <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">LinkedIn</a></li>
+                        <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">Instagram</a></li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/3">
+                    <h3 class="text-xl font-bold mb-4">Legal</h3>
+                    <ul class="text-sm">
+                        <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">Terms of Service</a></li>
+                        <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-sm text-center">
+                <p>&copy; {% now "Y" %} Dentify AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"

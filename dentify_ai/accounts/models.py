@@ -63,3 +63,10 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.email} : {self.first_name}'
+    
+    def get_full_name(self):
+        """
+        Return the first_name plus the last_name, with a space in between.
+        """
+        full_name = f"{self.first_name} {self.last_name}"
+        return full_name.strip()
