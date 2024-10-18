@@ -20,7 +20,7 @@ def landingpage(request):
 @login_required(login_url='login')
 def dashboard(request):
     history = Prediction.objects.filter(user=request.user)[:10]
-    return render(request, 'home/dashboard2.html', context={'history':history})
+    return render(request, 'home/dashboard.html', context={'history':history})
 
 @login_required(login_url='login')
 @csrf_exempt
