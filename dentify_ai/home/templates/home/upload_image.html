@@ -1,0 +1,141 @@
+{% extends 'dentify_ai/home/templates/master.html' %}
+
+{% block title %}
+<title>Dashboard - Teeth Disease Classification System</title>
+{% endblock %}
+
+{% block body %}
+{% if messages %}
+<section class="messages absolute w-[100%]" style="z-index: 5;">
+  {% for message in messages %}
+  <div
+    class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+    role="alert">
+    <strong>{{ message.tags|capfirst }} :</strong> {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+      onclick="this.parentNode.remove(true)"></button>
+  </div>
+  {% endfor %}
+</section>
+
+<div id="alert-area" class="relative m-0"></div>
+{% endif %}
+<div class="flex flex-col justify-center items-center gap-[25px] pt-[50px]">
+<div class="container items-center justify-center px-4 py-8 bg-[white] rounded-lg shadow-md max-h-fit w-10/12">
+  <div class="mb-8">
+    <h2 class="text-2xl font-bold mb-4">Upload X-ray for Prediction</h2>
+    <label id="dropzone" for="fileInput" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);"
+      class="w-full min-h-[250px] flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 transition duration-300">
+      <p class="text-gray-600 mb-2">Drag and drop your X-ray image here</p>
+      <p class="text-sm text-gray-500">or</p>
+      <label for="fileInput"
+        class="mt-2 inline-block bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600 transition duration-300">
+        Select File
+      </label>
+    </label>
+    <input id="fileInput" type="file" hidden accept="image/*" onchange="handleFileSelect(this.files)">
+    <div id="imagePreview-section" class="hidden bg-gray-100 mt-4 flex items-center p-4 rounded-lg justify-between">
+      <div class="block border border-gray-800 rounded-lg">
+        <img id="imagePreview" class="w-[75px] h-[75px] rounded-lg object-fill">
+      </div>
+      <p id="fileName" class="text-[14px] text-gray-600 font-bold"></p>
+      <button id="predictButton" onclick="predictImage()"
+        class="bg-green-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-green-600 transition duration-300">
+        Predict
+      </button>
+      <div id="loading-spinner" class="hidden ml-4">
+        <svg class="animate-spin h-5 w-5 text-gray-900" xmlns="http://www.w3.org/2000/svg" fill="none"
+          viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="container p-0 w-10/12">
+    <div class="overflow-x-hidden shadow-md rounded-lg box-border bg-[white]">
+      <h2 class="text-2xl font-bold p-[25px]" style="border-bottom: 2px solid lightgrey;">Prediction History</h2>
+      <div class="flex flex-col sm:flex-row justify-between items-center p-4 bg-[white] border-b">
+        <input type="text" id="search" placeholder="Search by Result"
+          class="mb-2 sm:mb-0 px-3 py-1 w-full sm:w-64 bg-gray-50 border rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
+          onkeyup="searchTable()">
+          <div class="flex items-center space-x-2 text-sm">
+            <button onclick="navigatePage(-1)"
+              class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
+              Prev
+            </button>
+            <span class="text-gray-700">Page {{ current_page }}/{{ total_pages }}</span>
+            <button onclick="navigatePage(1)"
+              class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
+              Next
+            </button>
+          </div>
+      </div>
+      <table class="w-full text-xs text-left text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+          <tr>
+            <th scope="col" class="px-4 py-2">#</th>
+            <th scope="col" class="px-4 py-2">Image</th>
+            <th scope="col" class="px-4 py-2">Date</th>
+            <th scope="col" class="px-4 py-2">Result</th>
+            <th scope="col" class="px-4 py-2">Confidence</th>
+            <th scope="col" class="px-4 py-2">Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for prediction in history %}
+          <tr class="bg-[white] border-b border-gray-50">
+            <td class="px-4 py-2">{{ forloop.counter }}</td>
+            <td class="px-4 py-2">
+              <img src="{{ prediction.xray_file.url }}" alt="Prediction"
+                class="w-16 h-16 object-cover rounded shadow-sm">
+            </td>
+            <td class="px-4 py-2">{{ prediction.pred_ts|date:"M d, Y H:i" }}</td>
+            <td class="px-4 py-2">{{ prediction.result }}</td>
+            <td class="px-4 py-2">{{ prediction.confidence|floatformat:2 }}%</td>
+            <td class="px-4 py-2">{{ prediction.message|truncatechars:30 }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+  function handleFileSelect(files) {
+    const file = files[0];
+    if (file) {
+      document.getElementById('imagePreview-section').classList.remove('hidden');
+      document.getElementById('imagePreview').src = URL.createObjectURL(file);
+      document.getElementById('fileName').textContent = file.name;
+    }
+  }
+
+  function predictImage() {
+    const spinner = document.getElementById('loading-spinner');
+    spinner.classList.remove('hidden');
+    setTimeout(() => {
+      spinner.classList.add('hidden');
+      alert('Prediction complete!');
+    }, 3000); // Simulating prediction delay
+  }
+
+  function searchTable() {
+    const searchInput = document.getElementById('search').value.toLowerCase();
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+      const result = row.querySelectorAll('td')[3].textContent.toLowerCase();
+      row.style.display = result.includes(searchInput) ? '' : 'none';
+    });
+  }
+
+  function navigatePage(direction) {
+    // Logic to handle page navigation based on current_page and total_pages
+    alert(`Navigating ${direction > 0 ? 'Next' : 'Previous'} page.`);
+  }
+</script>
+{% endblock %}
