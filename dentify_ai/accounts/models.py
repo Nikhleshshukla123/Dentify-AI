@@ -33,8 +33,9 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=150, blank=True, validators=[v.validate_last_name])
     gender = models.CharField(max_length=10, blank=True, choices=GENDER)
     dob = models.DateField(blank=True, null=True)
-    profile_pic = models.FileField(upload_to='', null=True, blank=True, storage=SupabaseStorage())
+    profile_pic = models.FileField(upload_to='profile_pic', null=True, blank=True, storage=SupabaseStorage())
     last_modified = models.DateField(auto_now=True)
+    bio = models.TextField(blank=True, null=True)
     # verification detail
     verified = models.BooleanField(default=False)
     email_otp = models.CharField(max_length=6,blank=True, null=True)
@@ -70,3 +71,11 @@ class User(AbstractUser):
         """
         full_name = f"{self.first_name} {self.last_name}"
         return full_name.strip()
+    
+#Profile Updation code 
+# class UserProfile(models.Model):
+#     user_name = models.CharField(max_length=100)
+#     user_email = models.EmailField(default='johndoe@example.com')
+#     user_age = models.IntegerField(default=0)
+#     user_bio = models.TextField()
+#     user_image = models.ImageField(upload_to='user_profile', blank=True, null=True)

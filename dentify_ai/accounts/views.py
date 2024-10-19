@@ -309,3 +309,36 @@ def newpassword(request):
     else:   
         messages.warning(request, "Maximum Time Exceeded. Try again.")
         return redirect('forgotpassword')
+    
+#User Updation code
+
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import ProfileEditForm
+from .models import User
+
+@login_required
+def profile(request):
+    user = request.user
+
+    if request.method == 'POST':
+        form = ProfileEditForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            user.first_name = form.cleaned_data['first_name']
+            user.last_name = form.cleaned_data['last_name']
+            user.phone = form.cleaned_data['phone']
+            user.gender = form.cleaned_data['gender']
+            user.dob = form.cleaned_data['dob']
+            user.bio = form.cleaned_data.get('bio', '')  # Make sure to handle bio if needed
+            if 'profile_pic' in request.FILES:
+                user.profile_pic = request.FILES['profile_pic']
+
+            user.save()
+            messages.success(request, 'Your profile has been updated!')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = ProfileEditForm(instance=user)
+
+    return render(request, 'home/profile.html', {'form': form})

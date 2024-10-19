@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from home.models import Prediction
 
+
 @login_required
 def home(request):
     # check user verified status
@@ -32,6 +33,10 @@ def predict(request):
             return JsonResponse({"message": "Prediction successful"})
     return JsonResponse({"message": "Prediction failed"}, status=400)
 
-@login_required(login_url='login')
-def profile(request):
-    return render(request, 'home/profile.html')
+
+
+
+
+
+
+

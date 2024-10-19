@@ -19,3 +19,10 @@ class Prediction(models.Model):
 
     def __str__(self):
         return f'{self.user.email} : {self.result} - {self.confidence : .2f}%'
+
+    
+
+
+
+
+
