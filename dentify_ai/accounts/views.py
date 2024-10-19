@@ -4,11 +4,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from .models import User
 import datetime as dt
 import random as rd
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 import io
+from .forms import ProfileEditForm
+
 
 
 User = get_user_model()
@@ -311,11 +314,6 @@ def newpassword(request):
         return redirect('forgotpassword')
     
 #User Updation code
-
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .forms import ProfileEditForm
-from .models import User
 
 @login_required
 def profile(request):

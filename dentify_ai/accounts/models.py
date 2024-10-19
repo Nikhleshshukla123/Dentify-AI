@@ -33,7 +33,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=150, blank=True, validators=[v.validate_last_name])
     gender = models.CharField(max_length=10, blank=True, choices=GENDER)
     dob = models.DateField(blank=True, null=True)
-    profile_pic = models.FileField(upload_to='profile_pic', null=True, blank=True, storage=SupabaseStorage())
+    profile_pic = models.FileField(upload_to='', null=True, blank=True, storage=SupabaseStorage())
     last_modified = models.DateField(auto_now=True)
     bio = models.TextField(blank=True, null=True)
     # verification detail

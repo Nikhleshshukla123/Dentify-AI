@@ -1,0 +1,51 @@
+{% extends 'home/master.html' %}
+
+{% block title %}
+<title>Crop Image</title>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h2>Crop Your Image</h2>
+    <img id="image-to-crop" src="{{ image.original_image.url }}" alt="To Crop" style="max-width: 100%;"/>
+
+    <button id="crop-button" class="btn btn-primary mt-3">Crop</button>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const image = document.getElementById('image-to-crop');
+        const cropper = new Cropper(image, {
+            aspectRatio: 1,
+            viewMode: 1,
+            autoCropArea: 1,
+        });
+
+        document.getElementById('crop-button').addEventListener('click', function () {
+            const cropData = cropper.getData(true);  // Get cropped area details
+
+            const formData = new FormData();
+            formData.append('x', cropData.x);
+            formData.append('y', cropData.y);
+            formData.append('width', cropData.width);
+            formData.append('height', cropData.height);
+
+            fetch("{% url 'save_cropped_image' image.id %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = "{% url 'dashboard' %}";
+                }
+            });
+        });
+    });
+</script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet"/>
+{% endblock %}
