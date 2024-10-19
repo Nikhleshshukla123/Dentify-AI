@@ -34,8 +34,8 @@ class ContactMessage(models.Model):
 # crop image model here
 class Image(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    original_image = models.ImageField(upload_to='original_images/', default='uploads/default.jpg')
-    cropped_image = models.ImageField(upload_to='cropped_images/', null=True, blank=True)
+    original_image = models.ImageField(upload_to='', default='uploads/default.jpg', storage=SupabaseStorage())
+    cropped_image = models.ImageField(upload_to='', null=True, blank=True, storage=SupabaseStorage())
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

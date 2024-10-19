@@ -49,13 +49,28 @@
 
 <script>
 
-    function searchTable() {
-        const searchInput = document.getElementById('search').value.toLowerCase();
-        const rows = document.querySelectorAll('tbody tr');
-        rows.forEach(row => {
-            const result = row.querySelectorAll('td')[3].textContent.toLowerCase();
-            row.style.display = result.includes(searchInput) ? '' : 'none';
-        });
+    async function searchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search");
+        filter = input.value.trim().toLowerCase();
+        table = document.querySelector("table");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3]; // Index 3 corresponds to the "Result" column
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toLowerCase().includes(filter)) {
+                    tr[i].style.display = "";
+                    td.style.backgroundColor = "yellow";
+                    setTimeout((td) => {
+                        td.style.backgroundColor = "";
+                    }, 100, td);
+                } else {
+                    tr[i].style.display = "none";
+                    td.style.backgroundColor = "";
+                }
+            }
+        }
     }
 
     function navigatePage(direction) {

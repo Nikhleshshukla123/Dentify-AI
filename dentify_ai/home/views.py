@@ -109,24 +109,5 @@ def dashboard(request):
     history = Image.objects.filter(user=request.user).order_by('-uploaded_at')[:10]
     return render(request, 'home/dashboard.html', context={'history': history})
 
-@login_required(login_url='login')
-def crop_image(request, image_id):
-    image = get_object_or_404(Image, id=image_id)
-
-    return render(request, 'home/crop_image.html', {'image': image})
 
     
-@csrf_exempt  # Use csrf_exempt only if necessary
-@login_required(login_url='login')
-def save_cropped_image(request, image_id):
-    if request.method == 'POST':
-        image = get_object_or_404(Image, id=image_id)
-        cropped_image = request.FILES.get('croppedImage')
-
-        if cropped_image:
-            image.cropped_image.save(f"cropped_{image.id}.jpg", cropped_image)
-            image.save()
-            return JsonResponse({'status': 'success'}, status=200)
-        else:
-            return JsonResponse({'error': 'No image provided'}, status=400)
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
