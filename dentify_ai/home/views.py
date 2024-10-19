@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -9,7 +9,12 @@ from .models import ContactMessage
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-
+from .models import Image
+from PIL import Image as PilImage
+from django.core.files.base import ContentFile
+import os
+import io
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required
 def home(request):
@@ -24,10 +29,10 @@ def landingpage(request):
         return redirect('dashboard')
     return render(request, 'home/landingpage.html')
 
-@login_required(login_url='login')
-def dashboard(request):
-    history = Prediction.objects.filter(user=request.user)[:10]
-    return render(request, 'home/dashboard.html', context={'history':history})
+# @login_required(login_url='login')
+# def dashboard(request):
+#     history = Prediction.objects.filter(user=request.user)[:10]
+#     return render(request, 'home/dashboard.html', context={'history':history})
 
 @login_required(login_url='login')
 @csrf_exempt
@@ -96,3 +101,32 @@ def contact_view(request):
         return redirect("landingpage")  # Replace with your landing page view name
 
     return render(request, "home/landing.html")  # Replace with your template
+
+
+# crop views file here
+@login_required(login_url='login')
+def dashboard(request):
+    history = Image.objects.filter(user=request.user).order_by('-uploaded_at')[:10]
+    return render(request, 'home/dashboard.html', context={'history': history})
+
+@login_required(login_url='login')
+def crop_image(request, image_id):
+    image = get_object_or_404(Image, id=image_id)
+
+    return render(request, 'home/crop_image.html', {'image': image})
+
+    
+@csrf_exempt  # Use csrf_exempt only if necessary
+@login_required(login_url='login')
+def save_cropped_image(request, image_id):
+    if request.method == 'POST':
+        image = get_object_or_404(Image, id=image_id)
+        cropped_image = request.FILES.get('croppedImage')
+
+        if cropped_image:
+            image.cropped_image.save(f"cropped_{image.id}.jpg", cropped_image)
+            image.save()
+            return JsonResponse({'status': 'success'}, status=200)
+        else:
+            return JsonResponse({'error': 'No image provided'}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)

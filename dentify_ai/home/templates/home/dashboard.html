@@ -1,4 +1,5 @@
 {% extends 'home/master.html' %}
+{% comment %} 
 
 {% block title %}
 <title>Dashboard - Teeth Disease Classification System</title>
@@ -55,6 +56,8 @@
   </div>
   <!-- {% include 'home/components/historytable.html' %} -->
 </div>
+<!-- crop image here -->
+
 
 {% endblock %}
 
@@ -79,4 +82,140 @@
   }
 
 </script>
+{% endblock %} {% endcomment %}
+
+
+<!-- new Dashboard here-->
+
+{% block title %}
+<title>Dashboard - Teeth Disease Classification System</title>
+{% endblock %}
+
+{% block body %}
+{% if messages %}
+<section class="messages absolute w-[100%]" style="z-index: 5;">
+  {% for message in messages %}
+  <div
+    class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+    role="alert">
+    <strong>{{ message.tags|capfirst }} :</strong> {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+      onclick="this.parentNode.remove(true)"></button>
+  </div>
+  {% endfor %}
+</section>
+
+<div id="alert-area" class="relative m-0"></div>
+{% endif %}
+<div class="flex flex-col justify-center items-center gap-[25px] pt-[50px]">
+  <div class="container items-center justify-center px-4 py-8 bg-[white] rounded-lg shadow-md max-h-fit w-10/12">
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold mb-4">Upload X-ray for Prediction</h2>
+      <label id="dropzone" for="fileInput" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);"
+        class="w-full min-h-[250px] flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500 transition duration-300">
+        <p class="text-gray-600 mb-2">Drag and drop your X-ray image here</p>
+        <p class="text-sm text-gray-500">or</p>
+        <label for="fileInput"
+          class="mt-2 inline-block bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600 transition duration-300">
+          Select File
+        </label>
+      </label>
+      <input id="fileInput" type="file" hidden accept="image/*" onchange="handleFileSelect(this.files)">
+      <div id="imagePreview-section" class="hidden bg-gray-100 mt-4 flex flex-col items-center p-4 rounded-lg justify-between">
+        <div class="block border border-gray-800 rounded-lg">
+          <img id="imagePreview" class="w-[300px] h-[300px] rounded-lg object-cover">
+        </div>
+        <p id="fileName" class="text-[14px] text-gray-600 font-bold"></p>
+        <button id="predictButton" onclick="predictImage()"
+          class="bg-green-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-green-600 transition duration-300">
+          Predict
+        </button>
+        <div id="loading-spinner" class="hidden ml-4">
+          <svg class="animate-spin h-5 w-5 text-gray-900" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Crop Image Section -->
+      <div id="cropImage-section" class="hidden mt-8">
+        <h3 class="text-xl font-bold mb-4">Crop Image</h3>
+        <div class="crop-container">
+          <img id="cropImage" src="" class="w-[300px] h-[300px] object-cover">
+        </div>
+        <button id="cropButton" class="bg-blue-500 text-white px-4 py-2 rounded mt-4 cursor-pointer hover:bg-blue-600 transition duration-300">
+          Crop and Save
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- {% include 'home/components/historytable.html' %} -->
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script>
+  let cropper;
+
+  function handleFileSelect(files) {
+    const file = files[0];
+    if (file) {
+      document.getElementById('imagePreview-section').classList.remove('hidden');
+      const imagePreview = document.getElementById('imagePreview');
+      imagePreview.src = URL.createObjectURL(file);
+      document.getElementById('fileName').textContent = file.name;
+      
+      // Show crop section and initialize cropper
+      document.getElementById('cropImage-section').classList.remove('hidden');
+      const cropImage = document.getElementById('cropImage');
+      cropImage.src = imagePreview.src;
+
+      cropper = new Cropper(cropImage, {
+        aspectRatio: 1,
+        viewMode: 1,
+        autoCropArea: 1,
+      });
+    }
+  }
+
+  function predictImage() {
+    const spinner = document.getElementById('loading-spinner');
+    spinner.classList.remove('hidden');
+    setTimeout(() => {
+      spinner.classList.add('hidden');
+      alert('Prediction complete!');
+    }, 3000); // Simulating prediction delay
+  }
+
+  document.getElementById('cropButton').addEventListener('click', function () {
+    if (cropper) {
+      const croppedCanvas = cropper.getCroppedCanvas();
+      croppedCanvas.toBlob((blob) => {
+        const formData = new FormData();
+        formData.append('croppedImage', blob);
+
+        // You can make an AJAX call here to send the cropped image to the server
+        fetch("{% url 'save_cropped_image' 0 %}", {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+          }
+        })
+        .then(response => {
+          if (response.ok) {
+            alert('Image cropped and saved successfully!');
+            window.location.reload();
+          } else {
+            alert('Error cropping the image.');
+          }
+        });
+      });
+    }
+  });
+</script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet"/>
 {% endblock %}
