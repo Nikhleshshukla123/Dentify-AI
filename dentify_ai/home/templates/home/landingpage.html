@@ -257,137 +257,102 @@
         </div>
     </section>
 
-
-    <!-- end of contact section  -->
+    <!-- footert section  -->
+    {% include 'home/components/footer.html' %}
 
     <!-- validations for form  -->
-     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Contact form element
-        const contactForm = document.getElementById('contactForm'); // Use the correct form ID
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Contact form element
+            const contactForm = document.getElementById('contactForm'); // Use the correct form ID
 
-        // Input fields
-        const nameInput = document.getElementById('name');
-        const emailInput = document.getElementById('email');
-        const subjectInput = document.getElementById('subject');
-        const messageInput = document.getElementById('message');
+            // Input fields
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const subjectInput = document.getElementById('subject');
+            const messageInput = document.getElementById('message');
 
-        // Error message containers
-        const nameError = document.getElementById('name-error');
-        const emailError = document.getElementById('email-error');
-        const subjectError = document.getElementById('subject-error');
-        const messageError = document.getElementById('message-error');
+            // Error message containers
+            const nameError = document.getElementById('name-error');
+            const emailError = document.getElementById('email-error');
+            const subjectError = document.getElementById('subject-error');
+            const messageError = document.getElementById('message-error');
 
-        // Email validation regex pattern
-        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            // Email validation regex pattern
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-        // Form submit event listener
-        contactForm.addEventListener('submit', function(event) {
-            let formIsValid = true;
+            // Form submit event listener
+            contactForm.addEventListener('submit', function (event) {
+                let formIsValid = true;
 
-            // Validate name input
-            if (nameInput.value.trim() === "") {
-                nameError.textContent = "Name is required.";
-                formIsValid = false;
-            } else {
-                nameError.textContent = ""; // Clear error message
-            }
+                // Validate name input
+                if (nameInput.value.trim() === "") {
+                    nameError.textContent = "Name is required.";
+                    formIsValid = false;
+                } else {
+                    nameError.textContent = ""; // Clear error message
+                }
 
-            // Validate email input
-            if (emailInput.value.trim() === "") {
-                emailError.textContent = "Email is required.";
-                formIsValid = false;
-            } else if (!emailPattern.test(emailInput.value.trim())) {
-                emailError.textContent = "Please enter a valid email address.";
-                formIsValid = false;
-            } else {
-                emailError.textContent = ""; // Clear error message
-            }
+                // Validate email input
+                if (emailInput.value.trim() === "") {
+                    emailError.textContent = "Email is required.";
+                    formIsValid = false;
+                } else if (!emailPattern.test(emailInput.value.trim())) {
+                    emailError.textContent = "Please enter a valid email address.";
+                    formIsValid = false;
+                } else {
+                    emailError.textContent = ""; // Clear error message
+                }
 
-            // Validate subject input
-            if (subjectInput.value.trim() === "") {
-                subjectError.textContent = "Subject is required.";
-                formIsValid = false;
-            } else {
-                subjectError.textContent = ""; // Clear error message
-            }
+                // Validate subject input
+                if (subjectInput.value.trim() === "") {
+                    subjectError.textContent = "Subject is required.";
+                    formIsValid = false;
+                } else {
+                    subjectError.textContent = ""; // Clear error message
+                }
 
-            // Validate message input
-            if (messageInput.value.trim() === "") {
-                messageError.textContent = "Message cannot be empty.";
-                formIsValid = false;
-            } else {
-                messageError.textContent = ""; // Clear error message
-            }
+                // Validate message input
+                if (messageInput.value.trim() === "") {
+                    messageError.textContent = "Message cannot be empty.";
+                    formIsValid = false;
+                } else {
+                    messageError.textContent = ""; // Clear error message
+                }
 
-            // Prevent form submission if validation fails
-            if (!formIsValid) {
-                event.preventDefault(); // Prevent the form from submitting
-            } else {
-                // Perform AJAX request to submit the form data
-                event.preventDefault(); // Prevent the default form submission
+                // Prevent form submission if validation fails
+                if (!formIsValid) {
+                    event.preventDefault(); // Prevent the form from submitting
+                } else {
+                    // Perform AJAX request to submit the form data
+                    event.preventDefault(); // Prevent the default form submission
 
-                // Create FormData object
-                const formData = new FormData(contactForm);
+                    // Create FormData object
+                    const formData = new FormData(contactForm);
 
-                // Use fetch to send the form data to the server
-                fetch(contactForm.action, {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert("Email has been sent successfully!"); // Alert for success
-                        contactForm.reset(); // Reset the form if needed
-                    } else {
-                        alert("There was an error sending your email. Please try again.");
-                    }
-                })
-                .catch(error => {
-                    alert("Network error: " + error.message); // Handle network errors
-                });
-            }
+                    // Use fetch to send the form data to the server
+                    fetch(contactForm.action, {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                alert("Email has been sent successfully!"); // Alert for success
+                                contactForm.reset(); // Reset the form if needed
+                            } else {
+                                alert("There was an error sending your email. Please try again.");
+                            }
+                        })
+                        .catch(error => {
+                            alert("Network error: " + error.message); // Handle network errors
+                        });
+                }
+            });
         });
-    });
 
-</script>
+    </script>
     <!--end of validation  -->
 
-    <!-- Footer Section -->
-    <footer class="bg-gray-200 py-16">
-        <div class="container mx-auto px-4 max-w-4xl">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Career</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Job Openings</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Internships</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Why Join Us</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Terms of Service</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">User Agreement</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Licensing</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Disclaimer</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Privacy Policy</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Data Protection</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Cookie Policy</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">GDPR Compliance</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="text-center mt-8">
-                <p class="text-gray-600">&copy; 2024 Dentify-ai. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-    <!-- end of footer section -->
     <script>
         document.getElementById('menu-toggle').addEventListener('click', function () {
 
