@@ -1,72 +1,51 @@
-<!-- cropper/templates/cropper/crop_image.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crop Image</title>
-    <style>
-        canvas {
-            border: 1px solid black;
-        }
-    </style>
-</head>
-<body>
-    <h1>Crop the Image</h1>
-    <canvas id="imageCanvas"></canvas>
-    <button id="cropButton">Crop</button>
-    <canvas id="cropCanvas"></canvas>
+{% extends 'home/master.html' %}
 
-    <script>
-        const imageUrl = "{{ image.image.url }}";
-        const imageCanvas = document.getElementById('imageCanvas');
-        const cropCanvas = document.getElementById('cropCanvas');
-        const cropButton = document.getElementById('cropButton');
+{% block title %}
+<title>Crop Image</title>
+{% endblock %}
 
-        const ctx = imageCanvas.getContext('2d');
-        const cropCtx = cropCanvas.getContext('2d');
+{% block body %}
+<div class="container">
+    <h2>Crop Your Image</h2>
+    <img id="image-to-crop" src="{{ image.original_image.url }}" alt="To Crop" style="max-width: 100%;"/>
 
-        let image = new Image();
-        let startX, startY, endX, endY;
-        let isDrawing = false;
+    <button id="crop-button" class="btn btn-primary mt-3">Crop</button>
+</div>
+{% endblock %}
 
-        image.src = imageUrl;
-        image.onload = function() {
-            imageCanvas.width = image.width;
-            imageCanvas.height = image.height;
-            ctx.drawImage(image, 0, 0);
-        };
-
-        imageCanvas.addEventListener('mousedown', (e) => {
-            isDrawing = true;
-            startX = e.offsetX;
-            startY = e.offsetY;
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const image = document.getElementById('image-to-crop');
+        const cropper = new Cropper(image, {
+            aspectRatio: 1,
+            viewMode: 1,
+            autoCropArea: 1,
         });
 
-        imageCanvas.addEventListener('mousemove', (e) => {
-            if (isDrawing) {
-                endX = e.offsetX;
-                endY = e.offsetY;
-                ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
-                ctx.drawImage(image, 0, 0);
-                ctx.strokeStyle = 'red';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(startX, startY, endX - startX, endY - startY);
-            }
-        });
+        document.getElementById('crop-button').addEventListener('click', function () {
+            const cropData = cropper.getData(true);  // Get cropped area details
 
-        imageCanvas.addEventListener('mouseup', () => {
-            isDrawing = false;
-        });
+            const formData = new FormData();
+            formData.append('x', cropData.x);
+            formData.append('y', cropData.y);
+            formData.append('width', cropData.width);
+            formData.append('height', cropData.height);
 
-        cropButton.addEventListener('click', () => {
-            const width = endX - startX;
-            const height = endY - startY;
-            cropCanvas.width = width;
-            cropCanvas.height = height;
-            cropCtx.drawImage(imageCanvas, startX, startY, width, height, 0, 0, width, height);
+            fetch("{% url 'save_cropped_image' image.id %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = "{% url 'dashboard' %}";
+                }
+            });
         });
-    </script>
-</body>
-</html>
-
+    });
+</script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet"/>
+{% endblock %}
