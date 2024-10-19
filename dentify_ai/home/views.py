@@ -3,6 +3,13 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from home.models import Prediction
+from django.core.mail import send_mail
+from django.contrib import messages
+from .models import ContactMessage
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
 
 @login_required
 def home(request):
@@ -35,3 +42,57 @@ def predict(request):
 @login_required(login_url='login')
 def profile(request):
     return render(request, 'home/profile.html')
+
+
+# view for handling contact form
+def contact_view(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
+
+        # Validate the form data
+        if not name or not email or not subject or not message:
+            messages.error(request, "All fields are required.")
+            return redirect("landingpage")  # Replace with your landing page view name
+
+        # Save the data to the database
+        contact_message = ContactMessage(
+            name=name, email=email, subject=subject, message=message
+        )
+        contact_message.save()
+        
+        html_message = render_to_string('home/contact_email.html', {
+            'name': name,
+            'subject': subject,
+            'message': message,
+        })
+        plain_message = strip_tags(html_message)
+
+        # Send an email notification to the client
+        send_mail(
+            subject=f"Confirmation: {subject}",
+            message=plain_message,
+            from_email=settings.EMAIL_HOST_USER,  # Replace with your email
+            recipient_list=[email],
+            fail_silently=False,
+            html_message=html_message,
+        )
+
+        # Send a notification to yourself (optional)
+        send_mail(
+            subject=f"New Contact Form Submission: {subject}",
+            message=f"New message from {name} ({email}):\n\n{message}",
+            from_email=settings.EMAIL_HOST_USER,  # Replace with your email
+            recipient_list=[settings.EMAIL_HOST_USER],  # Replace with your email
+            fail_silently=False,
+        )
+
+        # Show a success message
+        messages.success(
+            request, "Thank you for your message. We will get back to you shortly."
+        )
+        return redirect("landingpage")  # Replace with your landing page view name
+
+    return render(request, "home/landing.html")  # Replace with your template

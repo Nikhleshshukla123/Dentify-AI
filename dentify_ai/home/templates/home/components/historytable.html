@@ -1,0 +1,65 @@
+<div class="container p-0 w-10/12">
+    <div class="overflow-x-hidden shadow-md rounded-lg box-border bg-[white]">
+        <h2 class="text-2xl font-bold p-[25px]" style="border-bottom: 2px solid lightgrey;">Prediction History</h2>
+        <div class="flex flex-col sm:flex-row justify-between items-center p-4 bg-[white] border-b">
+            <input type="text" id="search" placeholder="Search by Result"
+                class="mb-2 sm:mb-0 px-3 py-1 w-full sm:w-64 bg-gray-50 border rounded-md focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
+                onkeyup="searchTable()">
+            <div class="flex items-center space-x-2 text-sm">
+                <button onclick="navigatePage(-1)"
+                    class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Prev
+                </button>
+                <span class="text-gray-700">Page {{ current_page }}/{{ total_pages }}</span>
+                <button onclick="navigatePage(1)"
+                    class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Next
+                </button>
+            </div>
+        </div>
+        <table class="w-full text-xs text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                <tr>
+                    <th scope="col" class="px-4 py-2">#</th>
+                    <th scope="col" class="px-4 py-2">Image</th>
+                    <th scope="col" class="px-4 py-2">Date</th>
+                    <th scope="col" class="px-4 py-2">Result</th>
+                    <th scope="col" class="px-4 py-2">Confidence</th>
+                    <th scope="col" class="px-4 py-2">Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prediction in history %}
+                <tr class="bg-[white] border-b border-gray-50">
+                    <td class="px-4 py-2">{{ forloop.counter }}</td>
+                    <td class="px-4 py-2">
+                        <img src="{{ prediction.xray_file.url }}" alt="Prediction"
+                            class="w-16 h-16 object-cover rounded shadow-sm">
+                    </td>
+                    <td class="px-4 py-2">{{ prediction.pred_ts|date:"M d, Y H:i" }}</td>
+                    <td class="px-4 py-2">{{ prediction.result }}</td>
+                    <td class="px-4 py-2">{{ prediction.confidence|floatformat:2 }}%</td>
+                    <td class="px-4 py-2">{{ prediction.message|truncatechars:30 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    function searchTable() {
+        const searchInput = document.getElementById('search').value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            const result = row.querySelectorAll('td')[3].textContent.toLowerCase();
+            row.style.display = result.includes(searchInput) ? '' : 'none';
+        });
+    }
+
+    function navigatePage(direction) {
+        // Logic to handle page navigation based on current_page and total_pages
+        alert(`Navigating ${direction > 0 ? 'Next' : 'Previous'} page.`);
+    }
+</script>

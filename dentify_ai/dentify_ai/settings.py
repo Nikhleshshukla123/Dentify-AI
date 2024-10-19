@@ -53,7 +53,8 @@ EXTERNAL_APPS = [
                  'rest_framework',
                  'corsheaders',
                  'accounts',
-                 'home'
+                 'home',
+                # 'cropper'
 ]
 
 INSTALLED_APPS += EXTERNAL_APPS
@@ -160,6 +161,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+
 
 # storage settings
 SUPABASE_ACCESS_KEY = os.environ.get('SUPABASE_ACCESS_KEY', '') 
