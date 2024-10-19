@@ -51,9 +51,9 @@
             <img id="profile-picture" class="w-28 h-28 rounded-full shadow-lg transform hover:scale-105 transition duration-300"
                 src="https://via.placeholder.com/150" alt="Profile Picture">
             <div class="ml-6">
-                <h2 id="user-name" class="text-3xl font-bold text-gray-800">John Doe</h2>
-                <p id="user-email" class="text-gray-600 mt-2">johndoe@example.com</p>
-                <p id="user-age" class="text-gray-600">Age: 35</p>
+                <h2 id="user-name" class="text-3xl font-bold text-gray-800">{{ request.user.first_name}} {{ request.user.last_name }}</h2>
+                <p id="user-email" class="text-gray-600 mt-2">{{ request.user.email }}</p>
+                <p id="user-age" class="text-gray-600">Age: {{ request.user.user_age }}</p>
                 <p id="user-bio" class="mt-2 text-sm text-gray-500">Enthusiast in dental health, exploring AI-based
                     teeth disease detection.</p>
             </div>
@@ -64,50 +64,103 @@
         </button>
     </div>
 
-    <!-- Edit Profile Form (Hidden by default) -->
-    <form id="edit-profile-form" class="mt-6 hidden" onsubmit="saveProfile(event)">
-        <div class="grid grid-cols-2 gap-6">
-            <div>
-                <label class="block text-gray-700">Name:</label>
-                <input type="text" id="name-input"
-                    class="mt-1 block w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 smooth-transition"
-                    placeholder="Enter your name" value="John Doe">
-            </div>
-            <div>
-                <label class="block text-gray-700">Email:</label>
-                <input type="email" id="email-input"
-                    class="mt-1 block w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 smooth-transition"
-                    placeholder="Enter your email" value="johndoe@example.com">
-            </div>
-            <div>
-                <label class="block text-gray-700">Age:</label>
-                <input type="number" id="age-input"
-                    class="mt-1 block w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 smooth-transition"
-                    placeholder="Enter your age" value="35">
-            </div>
-            <div>
-                <label class="block text-gray-700">Bio:</label>
-                <textarea id="bio-input"
-                    class="mt-1 block w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 smooth-transition"
-                    placeholder="Tell something about yourself">Enthusiast in dental health, exploring AI-based teeth disease detection.</textarea>
-            </div>
-            <div class="col-span-2">
-                <label class="block text-gray-700">Upload New Profile Picture:</label>
-                <input type="file" id="profile-picture-input"
-                    class="mt-1 block w-full text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 smooth-transition">
-            </div>
+<!-- Edit Profile Form (Hidden by default) -->
+<!-- <form action="{% url 'profile' %}" method="POST" id="edit-profile-form" class="mt-6 hidden max-w-lg mx-auto bg-white p-8 shadow-md rounded-lg space-y-6" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="grid grid-cols-2 gap-6">
+        <div>
+            <label for="user_name" class="block text-sm font-medium text-gray-700">Name:</label>
+            <input type="text" id="user_name" name="user_name" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="John Doe" value="John Doe" required>
         </div>
-        <div class="mt-4">
-            <button type="submit"
-                class="bg-green-500 hover-animate hover:bg-green-600 text-white px-5 py-2 rounded-md shadow-md smooth-transition">
-                Save Changes
-            </button>
-            <button type="button" onclick="cancelEdit()"
-                class="ml-4 bg-gray-500 hover-animate hover:bg-gray-600 text-white px-5 py-2 rounded-md shadow-md smooth-transition">
-                Cancel
-            </button>
+
+        <div>
+            <label for="user_email" class="block text-sm font-medium text-gray-700">Email:</label>
+            <input type="email" id="user_email" name="user_email" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="johndoe@example.com" value="johndoe@example.com" required>
         </div>
-    </form>
+    </div>
+
+    <div class="grid grid-cols-2 gap-6">
+        <div>
+            <label for="user_age" class="block text-sm font-medium text-gray-700">Age:</label>
+            <input type="number" id="user_age" name="user_age" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="35" value="35" required>
+        </div>
+
+        <div>
+            <label for="user_bio" class="block text-sm font-medium text-gray-700">Bio:</label>
+            <textarea id="user_bio" name="user_bio" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enthusiast in dental health, exploring AI-based teeth disease detection." required>Enthusiast in dental health, exploring AI-based teeth disease detection.</textarea>
+        </div>
+    </div>
+
+    <div>
+        <label for="user_image" class="block text-sm font-medium text-gray-700">Upload New Profile Picture:</label>
+        <input type="file" name="user_image" id="user_image" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100" required>
+    </div>
+
+    <div class="flex justify-end space-x-4">
+        <button type="button" onclick="cancelEdit()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Save Changes</button>
+    </div>
+</form> -->
+
+
+<!-- Edit Profile Form (Hidden by default) -->
+<form action="{% url 'profile' %}" method="POST" id="edit-profile-form" class="mt-6 hidden max-w-lg mx-auto bg-white p-8 shadow-md rounded-lg space-y-6" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="grid grid-cols-2 gap-6">
+        <div>
+            <label for="first_name" class="block text-sm font-medium text-gray-700">First Name:</label>
+            <input type="text" id="first_name" name="first_name" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="John" value="{{ request.user.first_name }}" required>
+        </div>
+
+        <div>
+            <label for="last_name" class="block text-sm font-medium text-gray-700">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Doe" value="{{ request.user.last_name }}" required>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-6">
+        <div>
+            <label for="phone" class="block text-sm font-medium text-gray-700">Phone:</label>
+            <input type="text" id="phone" name="phone" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="1234567890" value="{{ request.user.phone }}" required>
+        </div>
+
+        <div>
+            <label for="gender" class="block text-sm font-medium text-gray-700">Gender:</label>
+            <select id="gender" name="gender" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                <option value="" disabled {% if not request.user.gender %}selected{% endif %}>Select Gender</option>
+                <option value="m" {% if request.user.gender == 'm' %}selected{% endif %}>Male</option>
+                <option value="f" {% if request.user.gender == 'f' %}selected{% endif %}>Female</option>
+                <option value="x" {% if request.user.gender == 'x' %}selected{% endif %}>Other</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-6">
+        <div>
+            <label for="dob" class="block text-sm font-medium text-gray-700">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" value="{{ request.user.dob|date:'Y-m-d' }}" required>
+        </div>
+
+        <div>
+            <label for="bio" class="block text-sm font-medium text-gray-700">Bio:</label>
+            <textarea id="bio" name="bio" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enthusiast in dental health, exploring AI-based teeth disease detection." required>{{ request.user.bio }}</textarea>
+        </div>
+    </div>
+
+    <div>
+        <label for="profile_pic" class="block text-sm font-medium text-gray-700">Upload New Profile Picture:</label>
+        <input type="file" name="profile_pic" id="profile_pic" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100">
+    </div>
+
+    <div class="flex justify-end space-x-4">
+        <button type="button" onclick="cancelEdit()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Save Changes</button>
+    </div>
+</form>
+
+    
 
     <!-- Teeth Image Uploads History -->
     <div class="mt-10">
@@ -167,13 +220,13 @@
         event.preventDefault();
 
         // Update user profile details on the page
-        document.getElementById("user-name").textContent = document.getElementById("name-input").value;
-        document.getElementById("user-email").textContent = document.getElementById("email-input").value;
-        document.getElementById("user-age").textContent = "Age: " + document.getElementById("age-input").value;
-        document.getElementById("user-bio").textContent = document.getElementById("bio-input").value;
+        document.getElementById("user_name").textContent = document.getElementById("user_name").value;
+        document.getElementById("user_email").textContent = document.getElementById("user_email").value;
+        document.getElementById("user_age").textContent = "Age: " + document.getElementById("user_age").value;
+        document.getElementById("user_bio").textContent = document.getElementById("user_bio").value;
 
         // Check if the user uploaded a new profile picture
-        const fileInput = document.getElementById("profile-picture-input");
+        const fileInput = document.getElementById("user_image");
         if (fileInput.files && fileInput.files[0]) {
             const reader = new FileReader();
             reader.onload = function (e) {
@@ -185,6 +238,11 @@
         // Hide the edit form
         document.getElementById("edit-profile-form").classList.add("hidden");
     }
+
+    document.querySelector('form').addEventListener('submit', function(event) {
+        console.log('Form submitted');
+    });
+
 
     // Function to cancel profile edit
     function cancelEdit() {
