@@ -54,7 +54,6 @@ EXTERNAL_APPS = [
                  'corsheaders',
                  'accounts',
                  'home',
-                # 'cropper'
 ]
 
 INSTALLED_APPS += EXTERNAL_APPS

@@ -2,15 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from home.models import Prediction
+from home.models import Prediction, ContactMessage
 from django.core.mail import send_mail
 from django.contrib import messages
-from .models import ContactMessage
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from .models import Image
-from PIL import Image as PilImage
 from django.core.files.base import ContentFile
 import os
 import io
@@ -29,10 +26,10 @@ def landingpage(request):
         return redirect('dashboard')
     return render(request, 'home/landingpage.html')
 
-# @login_required(login_url='login')
-# def dashboard(request):
-#     history = Prediction.objects.filter(user=request.user)[:10]
-#     return render(request, 'home/dashboard.html', context={'history':history})
+@login_required(login_url='login')
+def dashboard(request):
+    history = Prediction.objects.filter(user=request.user)[:10]
+    return render(request, 'home/dashboard.html', context={'history':history})
 
 @login_required(login_url='login')
 @csrf_exempt
@@ -106,15 +103,7 @@ def contact_view(request):
 
     return render(request, "home/landing.html")  # Replace with your template
 
-
-# crop views file here
-@login_required(login_url='login')
-def dashboard(request):
-    history = Image.objects.filter(user=request.user).order_by('-uploaded_at')[:10]
-    return render(request, 'home/dashboard.html', context={'history': history})
-
 # terms of service view
-
 def terms_of_service(request):
     return render(request, 'home/components/terms_of_service.html')
 
