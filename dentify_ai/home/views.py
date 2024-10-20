@@ -67,12 +67,16 @@ def contact_view(request):
             name=name, email=email, subject=subject, message=message
         )
         contact_message.save()
-        
-        html_message = render_to_string('home/contact_email.html', {
-            'name': name,
-            'subject': subject,
-            'message': message,
-        })
+
+        html_message = render_to_string(
+            "home/contact_email.html",
+            {
+                "name": name,
+                "subject": subject,
+                "message": message,
+                "from_email": settings.EMAIL_HOST_USER,
+            },
+        )
         plain_message = strip_tags(html_message)
 
         # Send an email notification to the client
@@ -108,6 +112,3 @@ def contact_view(request):
 def dashboard(request):
     history = Image.objects.filter(user=request.user).order_by('-uploaded_at')[:10]
     return render(request, 'home/dashboard.html', context={'history': history})
-
-
-    
