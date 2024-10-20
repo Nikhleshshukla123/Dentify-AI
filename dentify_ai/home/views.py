@@ -109,5 +109,15 @@ def dashboard(request):
     history = Image.objects.filter(user=request.user).order_by('-uploaded_at')[:10]
     return render(request, 'home/dashboard.html', context={'history': history})
 
+# terms of service view
 
-    
+def terms_of_service(request):
+    return render(request, 'home/components/terms_of_service.html')
+
+# privacy policy view
+def privacy_policy(request):
+    return render(request, 'home/components/privacy_policy.html')
+
+# cookie policy view
+def cookie_policy(request):
+    return render(request, 'home/components/cookie_policy.html')
