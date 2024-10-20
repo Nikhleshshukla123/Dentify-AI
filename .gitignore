@@ -3,3 +3,4 @@ __pycache__/
 .env
 env/
 *.sqlite3
+migrations/0*.py
