@@ -67,12 +67,16 @@ def contact_view(request):
             name=name, email=email, subject=subject, message=message
         )
         contact_message.save()
-        
-        html_message = render_to_string('home/contact_email.html', {
-            'name': name,
-            'subject': subject,
-            'message': message,
-        })
+
+        html_message = render_to_string(
+            "home/contact_email.html",
+            {
+                "name": name,
+                "subject": subject,
+                "message": message,
+                "from_email": settings.EMAIL_HOST_USER,
+            },
+        )
         plain_message = strip_tags(html_message)
 
         # Send an email notification to the client
@@ -121,3 +125,4 @@ def privacy_policy(request):
 # cookie policy view
 def cookie_policy(request):
     return render(request, 'home/components/cookie_policy.html')
+
