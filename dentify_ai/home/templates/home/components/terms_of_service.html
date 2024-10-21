@@ -59,6 +59,27 @@
             align-items: center;
             margin-right: 10px;
         }
+
+        /* Nav Styles */
+        .nav {
+            display: flex;
+            justify-content: center;
+            background-color: #f4f6f8;
+            padding: 10px 0;
+        }
+
+        .nav a {
+            margin: 0 15px;
+            color: #004d99;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #00264d;
+        }
+
         /* Content Styles */
         .content {
             padding: 40px;
@@ -101,9 +122,14 @@
     </style>
 </head>
 <body>
+    
+        
     <div class="container">
-        <div class="sidebar">
-            <ul>
+       <div class="sidebar">
+        <div class="nav">
+            <a href="{% url 'landingpage' %}">Home</a>
+        </div>
+           <ul>
                 <li><a href="#"><span class="step-number">1</span> Accepting the terms</a></li>
                 <li><a href="#"><span class="step-number">2</span> Changes to terms</a></li>
                 <li><a href="#"><span class="step-number">3</span> Using our service</a></li>
