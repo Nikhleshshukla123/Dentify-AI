@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
 ]
 
 EXTERNAL_APPS = [
@@ -54,7 +55,6 @@ EXTERNAL_APPS = [
                  'corsheaders',
                  'accounts',
                  'home',
-                # 'cropper'
 ]
 
 INSTALLED_APPS += EXTERNAL_APPS

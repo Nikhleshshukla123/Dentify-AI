@@ -18,3 +18,4 @@ def handle_xray_file(sender, instance=None, **kwargs):
         instance.xray_file = Prediction.objects.get(pk=instance.pred_id).xray_file
 
 
+

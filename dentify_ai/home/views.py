@@ -2,19 +2,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from home.models import Prediction
+from home.models import Prediction, ContactMessage
 from django.core.mail import send_mail
 from django.contrib import messages
-from .models import ContactMessage
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from .models import Image
-from PIL import Image as PilImage
 from django.core.files.base import ContentFile
-import os
-import io
 from django.views.decorators.csrf import csrf_exempt
+import asyncio
+from worker.handle_xray import make_prediction
+import datetime as dt
 
 @login_required
 def home(request):
@@ -29,10 +27,10 @@ def landingpage(request):
         return redirect('dashboard')
     return render(request, 'home/landingpage.html')
 
-# @login_required(login_url='login')
-# def dashboard(request):
-#     history = Prediction.objects.filter(user=request.user)[:10]
-#     return render(request, 'home/dashboard.html', context={'history':history})
+@login_required(login_url='login')
+def dashboard(request):
+    history = Prediction.objects.filter(user=request.user)[:10]
+    return render(request, 'home/dashboard.html', context={'history':history})
 
 @login_required(login_url='login')
 @csrf_exempt
@@ -41,7 +39,25 @@ def predict(request):
         file = request.FILES.get('xray_file')
         print(file)
         if file:
-            return JsonResponse({"message": "Prediction successful"})
+            try:
+                result = asyncio.run(make_prediction(file))
+                # result = make_prediction(file)
+                print(dt.datetime.now(), result)
+
+                res = {
+                    "message": "Prediction successful",
+                    "result":result,
+                    # "image": file
+                }
+                print('sent')
+                return JsonResponse(res)
+            except Exception as e:
+                print(e)
+                res = {
+                    "message": "Prediction failed",
+                    "error":str(e)
+                }
+                return JsonResponse(res, status=400)
     return JsonResponse({"message": "Prediction failed"}, status=400)
 
 @login_required(login_url='login')
@@ -67,12 +83,16 @@ def contact_view(request):
             name=name, email=email, subject=subject, message=message
         )
         contact_message.save()
-        
-        html_message = render_to_string('home/contact_email.html', {
-            'name': name,
-            'subject': subject,
-            'message': message,
-        })
+
+        html_message = render_to_string(
+            "home/contact_email.html",
+            {
+                "name": name,
+                "subject": subject,
+                "message": message,
+                "from_email": settings.EMAIL_HOST_USER,
+            },
+        )
         plain_message = strip_tags(html_message)
 
         # Send an email notification to the client
@@ -102,12 +122,15 @@ def contact_view(request):
 
     return render(request, "home/landing.html")  # Replace with your template
 
+# terms of service view
+def terms_of_service(request):
+    return render(request, 'home/components/terms_of_service.html')
 
-# crop views file here
-@login_required(login_url='login')
-def dashboard(request):
-    history = Image.objects.filter(user=request.user).order_by('-uploaded_at')[:10]
-    return render(request, 'home/dashboard.html', context={'history': history})
+# privacy policy view
+def privacy_policy(request):
+    return render(request, 'home/components/privacy_policy.html')
 
+# cookie policy view
+def cookie_policy(request):
+    return render(request, 'home/components/cookie_policy.html')
 
-    

@@ -1,30 +1,35 @@
-<footer class="bg-gray-50 py-8 mt-16 w-full">
-    <div class="container mx-auto px-4">
-        <div class="flex flex-wrap justify-between w-10/12 mx-auto">
-            <div class="w-full md:w-1/3 mb-6 md:mb-0">
-                <h3 class="text-xl font-bold mb-4">Dentify AI</h3>
-                <p class="text-sm">Revolutionizing dental diagnostics with artificial intelligence.</p>
+<footer style="background-color: #f9f9f9; padding: 20px; margin-top: 40px; width: 100%;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 16px;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; width: 83.333%; margin: 0 auto;">
+            <div style="width: 100%; max-width: 33.333%; margin-bottom: 24px;">
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 16px;">Dentify AI</h3>
+                <p style="font-size: 0.875rem;">Revolutionizing dental <br>diagnostics with artificial <br> intelligence.</p>
             </div>
-            <div class="w-full md:w-1/3 mb-6 md:mb-0">
-                <h3 class="text-xl font-bold mb-4">Follow Us</h3>
-                <ul class="text-sm">
-                    <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">Facebook</a></li>
-                    <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">Twitter</a></li>
-                    <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">LinkedIn</a></li>
-                    <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">Instagram</a></li>
+            <div style="width: 100%; max-width: 33.333%; margin-bottom: 24px;">
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 16px;">Follow Us</h3>
+                <ul style="font-size: 0.875rem; list-style: none; padding: 0;">
+                    <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; color: black;" onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'">Facebook</a></li>
+                    <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; color: black;" onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'">Twitter</a></li>
+                    <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; color: black;" onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'">LinkedIn</a></li>
+                    <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; color: black;" onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'">Instagram</a></li>
                 </ul>
             </div>
-            <div class="w-full md:w-1/3">
-                <h3 class="text-xl font-bold mb-4">Legal</h3>
-                <ul class="text-sm">
-                    <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">Terms of Service</a></li>
-                    <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">Privacy Policy</a></li>
-                    <li class="mb-2"><a href="#" class="hover:text-blue-500 transition duration-150">Cookie Policy</a></li>
+            <div style="width: 100%; max-width: 33.333%;">
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 16px;">Legal</h3>
+                <ul style="font-size: 0.875rem; list-style: none; padding: 0;">
+                    <li style="margin-bottom: 8px;"><a href="{% url 'terms_of_service' %}" style="text-decoration: none; color: black;" onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'">Terms of Service</a></li>
+                    <li style="margin-bottom: 8px;"><a href="{% url 'privacy_policy' %}" style="text-decoration: none; color: black;" onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'">Privacy Policy</a></li>
+                    <li style="margin-bottom: 8px;"><a href="{% url 'cookie_policy' %}" style="text-decoration: none; color: black;" onmouseover="this.style.color='blue'" onmouseout="this.style.color='black'">Cookie Policy</a></li>
                 </ul>
             </div>
         </div>
-        <div class="border-t border-gray-700 mt-8 pt-6 text-sm text-center">
-            <p>&copy; {% now "Y" %} Dentify AI. All rights reserved.</p>
+        <div style="border-top: 1px solid #4a5568; margin-top: 32px; padding-top: 24px; font-size: 0.875rem; text-align: center;">
+            <p>&copy; {% now "Y" %} <span id="currentYear"></span> Dentify AI. All rights reserved.</p>
         </div>
     </div>
+
+    <script>
+        // Inline JavaScript to update the year dynamically
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
 </footer>

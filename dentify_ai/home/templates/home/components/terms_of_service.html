@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Dentify AI</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            display: flex;
+            width: 80%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: #e0f7fa;
+            padding: 20px;
+            width: 250px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar li {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        .sidebar li a {
+            text-decoration: none;
+            color: #00796b;
+            display: flex;
+            align-items: center;
+        }
+        .sidebar li a:hover {
+            color: #004d40;
+        }
+        .sidebar li a .step-number {
+            background-color: #009688;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        /* Nav Styles */
+        .nav {
+            display: flex;
+            justify-content: center;
+            background-color: #f4f6f8;
+            padding: 10px 0;
+        }
+
+        .nav a {
+            margin: 0 15px;
+            color: #004d99;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #00264d;
+        }
+
+        /* Content Styles */
+        .content {
+            padding: 40px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .content h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .content h2 {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .content p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .content .button-container {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .content .checkbox-label {
+            margin-left: 10px;
+        }
+        .content button {
+            margin-left: auto;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .content button:hover {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+    
+        
+    <div class="container">
+       <div class="sidebar">
+        <div class="nav">
+            <a href="{% url 'landingpage' %}">Home</a>
+        </div>
+           <ul>
+                <li><a href="#"><span class="step-number">1</span> Accepting the terms</a></li>
+                <li><a href="#"><span class="step-number">2</span> Changes to terms</a></li>
+                <li><a href="#"><span class="step-number">3</span> Using our service</a></li>
+                <li><a href="#"><span class="step-number">4</span> General restrictions</a></li>
+                <li><a href="#"><span class="step-number">5</span> Data and privacy</a></li>
+                <li><a href="#"><span class="step-number">6</span> User responsibilities</a></li>
+                <li><a href="#"><span class="step-number">7</span> Intellectual property</a></li>
+                <li><a href="#"><span class="step-number">8</span> Liability disclaimer</a></li>
+                <li><a href="#"><span class="step-number">9</span> Dispute resolution</a></li>
+                <li><a href="#"><span class="step-number">10</span> Contact us</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <h1>Terms of Service</h1>
+            <p>Updated October 2024</p>
+            <h2>1. Accepting the terms</h2>
+            <p>Welcome to Dentify AI. By using our platform, you agree to comply with these terms and conditions. Please read them carefully before using our services.</p>
+            <h2>2. Changes to terms</h2>
+            <p>We may update these terms periodically. Any changes will be posted on this page, and continued use of the platform constitutes acceptance of these updated terms.</p>
+            <h2>3. Using our service</h2>
+            <p>Dentify AI provides AI-powered dental diagnostics tools. Our services are intended for professional use and should not replace clinical judgment or professional consultation.</p>
+            <h2>4. General restrictions</h2>
+            <p>Users must not misuse the platform or attempt to access unauthorized areas of the system. Any violation may result in termination of access.</p>
+            <h2>5. Data and privacy</h2>
+            <p>We collect and process data as outlined in our Privacy Policy. By using our services, you agree to our data practices.</p>
+            <h2>6. User responsibilities</h2>
+            <p>Users are responsible for maintaining the confidentiality of their accounts and ensuring that information provided is accurate and up-to-date.</p>
+            <h2>7. Intellectual property</h2>
+            <p>All content, trademarks, and materials on this platform are the property of Dentify AI and are protected by intellectual property laws.</p>
+            <h2>8. Liability disclaimer</h2>
+            <p>Dentify AI is not liable for any harm or damages resulting from the use of our platform. We make no guarantees regarding the accuracy of our AI diagnostics and recommend consulting with a professional.</p>
+            <h2>9. Dispute resolution</h2>
+            <p>Any disputes arising from the use of our platform will be resolved through arbitration. By using our platform, you agree to waive the right to a court trial.</p>
+            <h2>10. Contact us</h2>
+            <p>If you have any questions regarding these terms, please <a href="mailto:info@dentifyai.com">contact us</a> or visit our contact page for more information.</p>
+            <div class="button-container">
+                <input type="checkbox" id="copy-email" name="copy-email">
+                <label for="copy-email" class="checkbox-label">Send a copy to my email</label>
+                <button>I AGREE</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
