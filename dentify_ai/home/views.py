@@ -9,9 +9,10 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.files.base import ContentFile
-import os
-import io
 from django.views.decorators.csrf import csrf_exempt
+import asyncio
+from worker.handle_xray import make_prediction
+import datetime as dt
 
 @login_required
 def home(request):
@@ -38,7 +39,25 @@ def predict(request):
         file = request.FILES.get('xray_file')
         print(file)
         if file:
-            return JsonResponse({"message": "Prediction successful"})
+            try:
+                result = asyncio.run(make_prediction(file))
+                # result = make_prediction(file)
+                print(dt.datetime.now(), result)
+
+                res = {
+                    "message": "Prediction successful",
+                    "result":result,
+                    # "image": file
+                }
+                print('sent')
+                return JsonResponse(res)
+            except Exception as e:
+                print(e)
+                res = {
+                    "message": "Prediction failed",
+                    "error":str(e)
+                }
+                return JsonResponse(res, status=400)
     return JsonResponse({"message": "Prediction failed"}, status=400)
 
 @login_required(login_url='login')
