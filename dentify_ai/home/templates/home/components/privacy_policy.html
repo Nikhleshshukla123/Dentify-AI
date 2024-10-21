@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Dentify AI</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Header and Navigation */
+        .header {
+            padding: 20px;
+            text-align: center;
+            background-color: #004d99;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            background-color: #f4f6f8;
+            padding: 10px 0;
+        }
+
+        .nav a {
+            margin: 0 15px;
+            color: #004d99;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #00264d;
+        }
+
+        /* Content Styles */
+        .content {
+            padding: 40px;
+        }
+
+        .content h2 {
+            font-size: 1.8rem;
+            color: #004d99;
+            margin-bottom: 10px;
+        }
+
+        .content p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .content ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .content ul li {
+            margin-bottom: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #004d99;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 0 10px;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+
+        .button:hover {
+            background-color: #00264d;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #f4f6f8;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Privacy Policy</h1>
+        </div>
+        {% comment %} <div class="nav">
+            <a href="{% url 'landingpage' %}">Home</a>
+            <a href="{% url '#about' %}">About</a>
+            <a href="{% url '#features' %}">Features</a>
+            <a href="{% url '#contact' %}">Contact</a> 
+        </div>  {% endcomment %}
+        <div class="content">
+            <h2>Introduction</h2>
+            <p>Welcome to Dentify AI's Privacy Policy. Your privacy is of utmost importance to us, and this policy explains how we collect, use, and safeguard your information.</p>
+            
+            <h2>Information We Collect</h2>
+            <p>We collect personal information that you provide when using our platform, including:</p>
+            <ul>
+                <li>Contact information (e.g., name, email address)</li>
+                <li>Usage data (e.g., interactions with our platform)</li>
+                <li>Health-related information for dental diagnostics (subject to confidentiality)</li>
+            </ul>
+
+            <h2>How We Use Your Information</h2>
+            <p>We use the information collected to:</p>
+            <ul>
+                <li>Provide and improve our AI-powered diagnostics services</li>
+                <li>Communicate with you about your account and our services</li>
+                <li>Analyze usage patterns to enhance user experience</li>
+                <li>Ensure compliance with legal and regulatory requirements</li>
+            </ul>
+
+            <h2>Data Security</h2>
+            <p>Your data is secured using industry-standard encryption and protection measures. We implement appropriate technical and organizational measures to protect your information from unauthorized access, disclosure, or misuse.</p>
+
+            <h2>Third-Party Services</h2>
+            <p>We may use third-party services to facilitate our operations. These third parties are required to maintain the confidentiality and security of your data and to use it only for the purposes we specify.</p>
+
+            <h2>Contact Us</h2>
+            <p>If you have any questions about our privacy practices, please <a href="mailto:privacy@dentifyai.com">contact us</a>.</p>
+
+            <div class="buttons">
+                <button class="button">More Details</button>
+                <button class="button">View Demo</button>
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; {% now "Y" %} Dentify AI. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
