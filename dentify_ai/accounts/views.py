@@ -141,7 +141,7 @@ def logoutuser(request):
 
 @login_required(login_url="login")
 @csrf_exempt
-def profile(request):
+def profile_api(request):
     response = {'success': True}
     if request.method == 'POST':
         stream = io.BytesIO(request.body)               
