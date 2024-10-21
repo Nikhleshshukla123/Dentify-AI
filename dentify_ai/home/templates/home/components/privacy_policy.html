@@ -117,19 +117,39 @@
             margin: 0;
             font-size: 0.9rem;
         }
+
+        /* Hidden section styles */
+        .more-details {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
     </style>
+    <script>
+        function toggleDetails() {
+            const detailsSection = document.getElementById('details');
+            if (detailsSection.style.display === 'none' || detailsSection.style.display === '') {
+                detailsSection.style.display = 'block';
+            } else {
+                detailsSection.style.display = 'none';
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>Privacy Policy</h1>
         </div>
-        {% comment %} <div class="nav">
+        <div class="nav">
             <a href="{% url 'landingpage' %}">Home</a>
-            <a href="{% url '#about' %}">About</a>
+            {% comment %} <a href="{% url '#about' %}">About</a>
             <a href="{% url '#features' %}">Features</a>
-            <a href="{% url '#contact' %}">Contact</a> 
-        </div>  {% endcomment %}
+            <a href="{% url '#contact' %}">Contact</a>  {% endcomment %}
+        </div> 
         <div class="content">
             <h2>Introduction</h2>
             <p>Welcome to Dentify AI's Privacy Policy. Your privacy is of utmost importance to us, and this policy explains how we collect, use, and safeguard your information.</p>
@@ -161,8 +181,13 @@
             <p>If you have any questions about our privacy practices, please <a href="mailto:privacy@dentifyai.com">contact us</a>.</p>
 
             <div class="buttons">
-                <button class="button">More Details</button>
-                <button class="button">View Demo</button>
+                <button class="button" onclick="toggleDetails()">More Details</button>
+                
+            </div>
+
+            <div id="details" class="more-details">
+                <h2>Additional Information</h2>
+                <p>We are committed to ensuring that your privacy is protected. For more in-depth details about our data retention policies, encryption standards, and third-party data sharing protocols, please review our comprehensive Privacy and Security Documentation or reach out to us directly.</p>
             </div>
         </div>
         <div class="footer">
